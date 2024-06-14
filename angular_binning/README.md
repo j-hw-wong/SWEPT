@@ -1,4 +1,4 @@
-## Code used to produce all figures in Chapter 5 of my PhD thesis, "Dependence of cosmological parameter constraints on angular binning of weak lensing two-point statistics".
+## Author: Robin Upham - Code used to produce all figures in Chapter 5 of my PhD thesis, "Dependence of cosmological parameter constraints on angular binning of weak lensing two-point statistics".
 
 ### Documentation
 
