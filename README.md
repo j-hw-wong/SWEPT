@@ -11,8 +11,8 @@ bandpowers - handled by the pcl_measurement/ package
 3) The inference analysis to constrain the w0-wa Dark Energy Equation of State parameters from the measured 3x2pt data 
 vector - handled by the inference_analysis/ package
 
-This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use on HPC is
-under construction.
+This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use at greater
+resolution on HPC is under construction.
 
 [General documentation for each package is currently under construction!]
 
