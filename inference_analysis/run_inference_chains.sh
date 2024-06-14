@@ -1,0 +1,26 @@
+#!/bin/bash
+
+start=$SECONDS
+
+SAVE_DIR=$MEASUREMENT_SAVE_DIR
+export SAVE_DIR
+
+ELL_MIN=$INPUT_ELL_MIN
+ELL_MAX=$INPUT_ELL_MAX
+
+INFERENCE_OUTPUT_DIR=inference_analysis/
+
+export COSMOSIS_ROOT_DIR
+export ELL_MIN
+export ELL_MAX
+export INFERENCE_OUTPUT_DIR
+export GAUSSIAN_CL_LIKELIHOOD_PATH
+
+NZ_TABLE_PATH=${SAVE_DIR}${NZ_TABLE_FILENAME}
+export NZ_TABLE_PATH
+COSMOSIS_N_ELL=$(echo "($ELL_MAX - $ELL_MIN + 1)/1" | bc)
+export COSMOSIS_N_ELL
+
+cd ${GAUSSIAN_CL_LIKELIHOOD_PATH}bash/
+pwd
+bash run_cosmosis_chains.sh

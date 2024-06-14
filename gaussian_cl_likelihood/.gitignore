@@ -1,0 +1,7 @@
+.vscode
+*.pyc
+docs/_build/
+fig1/
+fig3/
+fig3_old/
+.idea/
