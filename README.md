@@ -1,6 +1,6 @@
-# Simulator for WEak Lensing Power spectrum Tomography (SWEPT)
+# Simulator for WEak Lensing Power spectrum Tomography
 
-Welcome to SWEPT. This code is set up to do three components of a 3x2pt cosmological analysis that can be executed 
+This code is set up to do three components of a 3x2pt cosmological analysis that can be executed 
 individually or consecutively:
 
 1) The generation of a set of mock galaxy catalogues that simulate the observation of a next gen-like weak lensing 
