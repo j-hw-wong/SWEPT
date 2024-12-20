@@ -14,6 +14,7 @@ vector - handled by the inference_analysis/ package
 This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use at greater
 resolution on HPC is under construction.
 
-[General documentation for each package is currently under construction!]
+Catalogue simulation packaged into catalogue_sim, Pseudo-Cl measurement packaged into pcl_measurement, and Gaussian likelihood
+analysis packaged in inference_analysis, with relevant READMEs.
 
 Please contact jonathan.wong@manchester.ac.uk
