@@ -9,7 +9,8 @@ survey - handled by the ```catalogue_sim/``` package
 using the Pseudo-Cl estimator for the signal and analytic expressions for the noise Cls, which are then converted into 
 bandpowers - handled by the ```pcl_measurement/``` package
 3) The inference analysis to constrain the w0-wa Dark Energy Equation of State parameters from the measured 3x2pt data 
-vector - handled by the ```inference_analysis/``` package
+vector - handled by the ```inference_analysis/``` package. These rely on the ```gaussian_cl_likelihood``` and ```angular binning```
+packages, which have been forked/redeveloped from https://github.com/robinupham/gaussian_cl_likelihood, https://github.com/robinupham/angular_binning (Upham+21)
 
 Each of these folders come with relevant READMEs in the file structure to give a walkthrough on how to run the relevant
 simulation/analysis. Each (and all) of these components of the end-to-end 3x2pt cosmological analysis is defined for a 
