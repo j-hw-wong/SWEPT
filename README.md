@@ -11,13 +11,19 @@ bandpowers - handled by the pcl_measurement/ package
 3) The inference analysis to constrain the w0-wa Dark Energy Equation of State parameters from the measured 3x2pt data 
 vector - handled by the inference_analysis/ package
 
-Each of these folders come with relevant READMEs in the file structure to give a walkthrough on how to run the
+Each of these folders come with relevant READMEs in the file structure to give a walkthrough on how to run the relevant
 simulation/analysis.
 
-A description and demonstration of this code run fully from end to end is also presented in '_Euclid:_Optimising 
+A description and demonstration of this code run fully from end to end is also presented in '*Euclid*:Optimising 
 tomographic binning for 3x2pt power spectrum constraints on dark energy,' Wong+24 (in review).
 
 This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use at greater
 resolution on HPC cluster is under construction/available on request.
 
-Please contact jonathan.wong@manchester.ac.uk
+The list of python dependencies for all three components is found in ```REQUIREMENTS.TXT```. In addition to python 
+packages, this code requires two additional software installations on the local machine:
+
+- ```CosmoSIS``` (Zuntz+18), https://arxiv.org/pdf/1409.3409, https://bitbucket.org/joezuntz/cosmosis/wiki/Home
+- ```FLASK``` (Xavier+16), https://arxiv.org/pdf/1602.08503, http://www.astro.iag.usp.br/~flask/
+
+For any questions, please contact jonathan.wong@manchester.ac.uk or jonathanhw.wong@gmail.com
