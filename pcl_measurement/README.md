@@ -10,4 +10,5 @@ Before running the Pseudo-Cl measurement, we then need to set the path to the pa
 
 - In ```run_3x2pt_tomo_measurement.sh```, set ```PIPELINE_VARIABLES_PATH``` to the location of the config file on disk, i.e. ```PIPELINE_VARIABLES_PATH="/local-path-to/SWEPT/pcl_measurement/set_variables_3x2pt_measurement.ini"```
 
-Then to execute the tomographic Pseudo-Cl measurement, run ```run_3x2pt_tomo_measurement.sh``` in bash.
+Then to execute the tomographic Pseudo-Cl measurement, run ```run_3x2pt_tomo_measurement.sh``` in bash. The code will measure the Pseudo-Cl power spectra, binned into
+angular bandpowers, from the simulated data/mock shear catalogues, and save the measured spectra on disk. Based on the simulation settings and fiducial cosmology (as specified in ```set_ variables_3x2pt_measurement.ini```), the code will also generate a predicted/theoretical signal to fit to the measured simulated data. The predicted signal and measured signal will be saved in txt format in a location specified in the ```set_ variables_3x2pt_measurement.ini``` config file.
