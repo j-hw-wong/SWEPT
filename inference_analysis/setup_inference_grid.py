@@ -24,6 +24,9 @@ config.read(pipeline_variables_path)
 save_dir = str(config['inference_analysis_params']['MEASUREMENT_SAVE_DIR'])
 n_chains = int(float(config['inference_analysis_params']['N_CHAINS']))
 
+# Set ranges of grid in w0-wa to use for likelihood analysis. Here, 'min', 'max' and 'steps' are the minimum value, maximum value, and no.steps to discretise
+# grid between [min, max] for each of w0 ('w' in the dictionary below) and wa ('wa' in the dictionary below)
+
 params = {
     'cosmological_parameters--w': {
         'min': -1.3,
