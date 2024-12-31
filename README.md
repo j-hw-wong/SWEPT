@@ -1,4 +1,4 @@
-# Simulator for WEak Lensing Power spectrum Tomography
+# Simulator for WEak Lensing Power spectrum Tomography (SWEPT)
 
 This code is set up to do three components of a 3x2pt cosmological analysis that can be executed 
 individually or consecutively:
@@ -13,10 +13,10 @@ vector - handled by the ```inference_analysis/``` package
 
 Each of these folders come with relevant READMEs in the file structure to give a walkthrough on how to run the relevant
 simulation/analysis. Each (and all) of these components of the end-to-end 3x2pt cosmological analysis is defined for a 
-fiducial cosmology, which is specified/set in the software_utils directory - please see the README and config files here
+fiducial cosmology, which is specified/set in the ```software_utils``` directory - please see the README and config files here
 for information on how to set the global fiducial cosmology for the analysis.
 
-A description and demonstration of this code run fully from end to end is also presented in '*Euclid*:Optimising 
+A description and demonstration of this code run fully from end to end is also presented in '*Euclid*: Optimising 
 tomographic binning for 3x2pt power spectrum constraints on dark energy,' Wong+24 (in review).
 
 This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use at greater
