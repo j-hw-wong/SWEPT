@@ -11,10 +11,13 @@ bandpowers - handled by the pcl_measurement/ package
 3) The inference analysis to constrain the w0-wa Dark Energy Equation of State parameters from the measured 3x2pt data 
 vector - handled by the inference_analysis/ package
 
-This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use at greater
-resolution on HPC is under construction.
+Each of these folders come with relevant READMEs in the file structure to give a walkthrough on how to run the
+simulation/analysis.
 
-Catalogue simulation packaged into catalogue_sim, Pseudo-Cl measurement packaged into pcl_measurement, and Gaussian likelihood
-analysis packaged in inference_analysis, with relevant READMEs.
+A description and demonstration of this code run fully from end to end is also presented in '_Euclid:_Optimising 
+tomographic binning for 3x2pt power spectrum constraints on dark energy,' Wong+24 (in review).
+
+This code is designed to run on a laptop/desktop, so is generally serial in nature. Code for parallel use at greater
+resolution on HPC cluster is under construction/available on request.
 
 Please contact jonathan.wong@manchester.ac.uk
