@@ -3,7 +3,8 @@
 The catalogue simulation is executed by running ```run_cat_sim.sh``` in bash.
 
 To set up the simulation we need to define the survey parameters in set_variables_cat.ini config file, and direct the pipeline path
-in run_cat_sim.sh. The simulated catalogues will be saved on disk in a location specified in the config file. Specifically, in set_variables_cat.ini:
+in run_cat_sim.sh. The simulated catalogues will be saved on disk in a location specified in the config file. The config file contains detailed
+information on setup parameters, but to note specifically, in set_variables_cat.ini:
 
 - Change the ```PIPELINE_DIR``` to the root directory where the package is installed, i.e.
 ```PIPELINE_DIR=/path-in-system/SWEPT/```
@@ -16,7 +17,7 @@ in run_cat_sim.sh. The simulated catalogues will be saved on disk in a location 
 
 - In ```[compile_cat]```, change the errors injected into the redshift photo-z estimates and galaxy/shear shapes.
 
-Change the ```COSMOSIS_ROOT_DIR``` to the directory where ```CosmoSIS``` is installed on disk.
+- Change the ```COSMOSIS_ROOT_DIR``` to the directory where ```CosmoSIS``` is installed on disk.
 
-In ```run_cat_sim.sh```, change the ```PIPELINE_VARIABLES_PATH``` to the path where the ```set_variables_cat.ini``` file is located, i.e.
+And in ```run_cat_sim.sh```, change the ```PIPELINE_VARIABLES_PATH``` to the path where the ```set_variables_cat.ini``` file is located, i.e.
 ```PIPELINE_VARIABLES_PATH=/path-in-system/SWEPT/catalogue_sim/set_variables_cat.ini```
