@@ -2,8 +2,8 @@
 
 The catalogue simulation is executed by running ```run_cat_sim.sh``` in bash.
 
-To set up the simulation we need to define the survey parameters in set_variables_cat.ini, and direct the pipeline path
-in run_cat_sim.sh. Specifically, in set_variables_cat.ini:
+To set up the simulation we need to define the survey parameters in set_variables_cat.ini config file, and direct the pipeline path
+in run_cat_sim.sh. The simulated catalogues will be saved on disk in a location specified in the config file. Specifically, in set_variables_cat.ini:
 
 - Change the ```PIPELINE_DIR``` to the root directory where the package is installed, i.e.
 ```PIPELINE_DIR=/path-in-system/SWEPT/```
