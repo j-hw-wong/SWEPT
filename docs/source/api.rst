@@ -5,3 +5,7 @@ API
    :toctree: generated
 
    lumache
+
+.. toctree::
+
+   inference_analysis
