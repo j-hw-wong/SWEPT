@@ -1,8 +1,14 @@
-version: "2"
+version: "1"
 
-sphinx:
-  configuration: docs/source/conf.py
+build:
+  os: "CentOS"
+  tools:
+    python: "3.6.15"
 
 python:
   install:
+    - requirements: ./requirements.txt
     - requirements: docs/requirements.txt
+
+sphinx:
+  configuration: docs/source/conf.py
