@@ -1,6 +1,8 @@
 API
 ===
 
+Some random test here
+
 .. autosummary::
    :toctree: generated
 
