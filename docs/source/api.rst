@@ -1,8 +1,10 @@
 API
 ===
 
-Some random test here
+Some random test here.
+
+automodule: inference_analysis.inference_analysis
 
 .. toctree::
    :maxdepth: 4
-   inf
+   inference_analysis
