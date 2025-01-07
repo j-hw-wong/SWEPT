@@ -1,7 +1,6 @@
 version: "1"
 
 python:
-  version: 3.6.15
   install:
     - requirements: requirements.txt
     - requirements: docs/requirements.txt
