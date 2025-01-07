@@ -30,3 +30,7 @@ packages, this code requires two additional software installations on the local 
 - ```FLASK``` (Xavier+16), https://arxiv.org/pdf/1602.08503, http://www.astro.iag.usp.br/~flask/
 
 For any questions, please contact jonathan.wong@manchester.ac.uk or jonathanhw.wong@gmail.com
+
+## Documentation
+
+Full documentation available at [Read the Docs](https://swept.readthedocs.io/en/latest/#)
