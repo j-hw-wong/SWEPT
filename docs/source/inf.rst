@@ -1,0 +1,3 @@
+.. toctree::
+
+   inference_analysis
