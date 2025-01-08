@@ -5,5 +5,5 @@ numpy
 pymaster
 scipy
 GSL
-FFTW
+pyFFTW
 fitsio
