@@ -3,7 +3,3 @@ healpy
 matplotlib
 numpy
 scipy
-GSL
-pyFFTW
-fitsio
-pymaster
