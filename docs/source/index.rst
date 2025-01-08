@@ -33,4 +33,4 @@ Contents
 
 .. toctree::
 
-   api
+   inf
