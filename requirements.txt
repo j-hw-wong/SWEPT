@@ -2,8 +2,8 @@ h5py
 healpy
 matplotlib
 numpy
-pymaster
 scipy
 GSL
 pyFFTW
 fitsio
+pymaster
