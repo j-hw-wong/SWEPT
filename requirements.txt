@@ -1,4 +1,4 @@
-cosmosis==3.15
+cosmosis
 h5py==3.7.0
 healpy==1.18.0
 matplotlib==3.5.3
