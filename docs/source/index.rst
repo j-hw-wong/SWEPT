@@ -35,3 +35,4 @@ Contents
    :maxdepth: 4
 
    inf
+   api
