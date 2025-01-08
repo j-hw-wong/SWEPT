@@ -7,4 +7,4 @@ scipy
 cfitsio
 GSL
 FFTW
-cfitsio
+fitsio
