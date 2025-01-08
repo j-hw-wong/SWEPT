@@ -7,3 +7,4 @@ Some random test here.
    :maxdepth: 4
 
    pcl_measurement
+   inference_analysis

@@ -1,5 +1,5 @@
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
    pcl_measurement/av_cls
    pcl_measurement/conv_bps
