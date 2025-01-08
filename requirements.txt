@@ -4,3 +4,7 @@ matplotlib
 numpy
 pymaster
 scipy
+cfitsio
+GSL
+FFTW
+cfitsio
