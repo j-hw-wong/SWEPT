@@ -19,11 +19,12 @@ def av_cls_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
+    pipeline_variables_path : (str)
+        Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
 
     Returns
     -------
-    Dictionary of parameters used by this script to measure average 3x2pt power spectra
+        Dictionary of parameters used by this script to measure average 3x2pt power spectra
     """
 
     config = configparser.ConfigParser()
@@ -61,7 +62,7 @@ def calc_av_cls(cl_dir, ell_min, ell_max, bin_i, bin_j, realisations):
     Parameters
     ----------
     cl_dir (str):   Path to where the 'raw' power spectra (measured from measure_cat_3x2pt_pcls.py) are stored. There
-                    should be subdirectories for each realisation within this directory.
+    should be subdirectories for each realisation within this directory.
     ell_min (float):    Output minimum ell to save the power spectra on disk
     ell_max (float):    Output maximum ell to save the power spectra on disk
     bin_i (float):  Tomographic bin id number of the first field
