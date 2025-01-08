@@ -1,4 +1,4 @@
-.. automodule:: pcl_measurement
+.. automodule:: pcl_measurement.av_cls
    :members:
    :undoc-members:
    :show-inheritance:
