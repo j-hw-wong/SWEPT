@@ -4,6 +4,6 @@ API
 Some random test here.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
 
    pcl_measurement

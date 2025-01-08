@@ -1,6 +1,7 @@
-Some random test here.
-
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
+   pcl_measurement/av_cls
+   pcl_measurement/av_cls
+   pcl_measurement/av_cls
    pcl_measurement/av_cls
