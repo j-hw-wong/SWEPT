@@ -1,3 +1,6 @@
+Inference analysis
+===
+
 .. toctree::
    :maxdepth: 1
 
