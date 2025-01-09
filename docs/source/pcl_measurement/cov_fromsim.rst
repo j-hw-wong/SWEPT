@@ -1,5 +1,5 @@
 cov\_fromsim module
-===
+===================================
 
 .. automodule:: pcl_measurement.cov_fromsim
    :members:
