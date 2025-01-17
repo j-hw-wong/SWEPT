@@ -10,7 +10,7 @@ using the Pseudo-Cl estimator for the signal and analytic expressions for the no
 bandpowers - handled by the ```pcl_measurement/``` package
 3) The inference analysis to constrain the w0-wa Dark Energy Equation of State parameters from the measured 3x2pt data 
 vector - handled by the ```inference_analysis/``` package. These rely on the ```gaussian_cl_likelihood``` and ```angular binning```
-packages, which have been forked/redeveloped from https://github.com/robinupham/gaussian_cl_likelihood, https://github.com/robinupham/angular_binning (Upham+21, Thesis)
+packages, which have been forked/redeveloped from https://github.com/robinupham/gaussian_cl_likelihood, https://github.com/robinupham/angular_binning (references therein, Upham+21)
 
 Each of these folders come with relevant READMEs in the file structure to give a walkthrough on how to run the relevant
 simulation/analysis. Each (and all) of these components of the end-to-end 3x2pt cosmological analysis is defined for a 
@@ -29,8 +29,7 @@ packages, this code requires two additional software installations on the local 
 - ```CosmoSIS``` (Zuntz+18), https://arxiv.org/pdf/1409.3409, https://bitbucket.org/joezuntz/cosmosis/wiki/Home
 - ```FLASK``` (Xavier+16), https://arxiv.org/pdf/1602.08503, http://www.astro.iag.usp.br/~flask/
 
-and ```NaMaster``` (Alonso+18), https://arxiv.org/pdf/1809.09603 which depending on the local machine may need to be installed
-from source or via conda
+and from the Requirements, ```NaMaster``` (Alonso+18), https://arxiv.org/pdf/1809.09603 may need to be installed from source or via conda depending on the local machine 
 
 - https://github.com/LSSTDESC/NaMaster
 - https://namaster.readthedocs.io/en/latest/source/installation.html
