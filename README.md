@@ -29,7 +29,8 @@ packages, this code requires two additional software installations on the local 
 - ```CosmoSIS``` (Zuntz+18), https://arxiv.org/pdf/1409.3409, https://bitbucket.org/joezuntz/cosmosis/wiki/Home
 - ```FLASK``` (Xavier+16), https://arxiv.org/pdf/1602.08503, http://www.astro.iag.usp.br/~flask/
 
-Depending on the local machine, ```NaMaster``` (Alonso+18), https://arxiv.org/pdf/1809.09603 from source or via conda
+and ```NaMaster``` (Alonso+18), https://arxiv.org/pdf/1809.09603 which depending on the local machine may need to be installed
+from source or via conda
 
 - https://github.com/LSSTDESC/NaMaster
 - https://namaster.readthedocs.io/en/latest/source/installation.html
