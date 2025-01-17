@@ -38,4 +38,4 @@ For any questions, please contact jonathan.wong@manchester.ac.uk or jonathanhw.w
 
 ## Documentation
 
-Full documentation available at [Read the Docs](https://swept.readthedocs.io/en/latest/#)
+Full documentation available at [Read the Docs](https://swept.readthedocs.io/en/latest/#) (Note this is currently under active construction)
