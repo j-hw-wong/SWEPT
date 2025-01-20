@@ -32,5 +32,7 @@ Contents
 --------
 
 .. toctree::
+   :maxdepth: 1
 
+   inf
    api

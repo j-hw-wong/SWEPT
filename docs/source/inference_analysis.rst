@@ -1,4 +1,7 @@
-.. automodule:: setup_inference
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Inference analysis
+===================================
+
+.. toctree::
+   :maxdepth: 1
+
+   inference_analysis/run_inference

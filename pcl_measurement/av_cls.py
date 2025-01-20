@@ -19,11 +19,12 @@ def av_cls_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
+    pipeline_variables_path : (str)
+        Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
 
     Returns
     -------
-    Dictionary of parameters used by this script to measure average 3x2pt power spectra
+        Dictionary of parameters used by this script to measure average 3x2pt power spectra
     """
 
     config = configparser.ConfigParser()
@@ -60,17 +61,23 @@ def calc_av_cls(cl_dir, ell_min, ell_max, bin_i, bin_j, realisations):
 
     Parameters
     ----------
-    cl_dir (str):   Path to where the 'raw' power spectra (measured from measure_cat_3x2pt_pcls.py) are stored. There
-                    should be subdirectories for each realisation within this directory.
-    ell_min (float):    Output minimum ell to save the power spectra on disk
-    ell_max (float):    Output maximum ell to save the power spectra on disk
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    realisations:   Number of realisations that the power spectra are averaged over
+    cl_dir : (str)
+        Path to where the 'raw' power spectra (measured from `measure_cat_3x2pt_pcls`) are stored. There should be
+        subdirectories for each realisation within this directory.
+    ell_min : (float)
+        Output minimum ell to save the power spectra on disk
+    ell_max  : (float)
+        Output maximum ell to save the power spectra on disk
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    realisations : (int)
+        Number of realisations that the power spectra are averaged over
 
     Returns
     -------
-    txt files of the averaged 3x2pt power spectra for each tomographic component. Saved to the cl_dir path.
+        txt files of the averaged 3x2pt power spectra for each tomographic component. Saved to the cl_dir path.
     """
 
     cls = []
@@ -100,18 +107,24 @@ def calc_stdem_cls(cl_dir, ell_min, ell_max, bin_i, bin_j, realisations):
 
     Parameters
     ----------
-    cl_dir (str):   Path to where the 'raw' power spectra (measured from measure_cat_3x2pt_pcls.py) are stored. There
-                    should be subdirectories for each realisation within this directory.
-    ell_min (float):    Output minimum ell to save the power spectra on disk
-    ell_max (float):    Output maximum ell to save the power spectra on disk
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    realisations:   Number of realisations that the power spectra are averaged over
+    cl_dir : (str)
+        Path to where the 'raw' power spectra (measured from `measure_cat_3x2pt_pcls`) are stored. There should be
+        subdirectories for each realisation within this directory.
+    ell_min : (float)
+        Output minimum ell to save the power spectra on disk
+    ell_max : (float)
+        Output maximum ell to save the power spectra on disk
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    realisations : (int)
+        Number of realisations that the power spectra are averaged over
 
     Returns
     -------
-    txt files of the standard error on mean for the 3x2pt power spectra for each tomographic component. Saved to the
-    cl_dir path.
+        txt files of the standard error on mean for the 3x2pt power spectra for each tomographic component. Saved to
+        the cl_dir path.
     """
 
     cls_err = []
@@ -141,9 +154,11 @@ def calc_av_nz(nz_tables_dir, realisations):
 
     Parameters
     ----------
-    nz_tables_dir (str):    Path to location that the n(z) tables are stored for each realisation. This is defined in
-                            the measure_cat_3x2pt_pcls.py script.
-    realisations (float):   Total number of realisations to average the measured n(z).
+    nz_tables_dir : (str)
+        Path to location that the n(z) tables are stored for each realisation. This is defined in the
+        measure_cat_3x2pt_pcls.py script.
+    realisations : (float)
+        Total number of realisations to average the measured n(z).
 
     Returns
     -------

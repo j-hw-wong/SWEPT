@@ -1,3 +1,4 @@
-.. toctree::
+Inf
+=====
 
-   inference_analysis
+Test text here
