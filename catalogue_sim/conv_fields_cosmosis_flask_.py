@@ -130,7 +130,7 @@ def execute(config_dict):
     cmb_kk_ell_file = cosmosis_data_dir + 'cmbkappa_cl/ell.txt'
     cmb_kk_ell = open_data(cmb_kk_ell_file)
 
-    cmb_kk_file_name = '/Cl-f1z{}f1z{}.dat'.format(nbins+1, nbins+1)
+    cmb_kk_file_name = '/Cl-f2z{}f2z{}.dat'.format(nbins+1, nbins+1)
     cmb_kk__save_file_name = flask_data_dir + cmb_kk_file_name
     np.savetxt(cmb_kk__save_file_name, np.transpose([cmb_kk_ell, cmb_kk_cl]), fmt='%.18f')
 
@@ -142,14 +142,14 @@ def execute(config_dict):
         shear_cmbkappa_txt_file = cosmosis_data_dir + 'shear_cmbkappa_cl/bin_{}_1.txt'.format(i)
         shear_cmbkappa_cl = open_data(shear_cmbkappa_txt_file)
 
-        shear_cmbkappa_file_name = '/Cl-f1z{}f1z{}.dat'.format(nbins+1, i)
+        shear_cmbkappa_file_name = '/Cl-f2z{}f1z{}.dat'.format(nbins+1, i)
         shear_cmbkappa_save_file_name = flask_data_dir + shear_cmbkappa_file_name
         np.savetxt(shear_cmbkappa_save_file_name, np.transpose([ell, shear_cmbkappa_cl]), fmt='%.18f')
 
         galaxy_cmbkappa_txt_file = cosmosis_data_dir + 'galaxy_cmbkappa_cl/bin_{}_1.txt'.format(i)
         galaxy_cmbkappa_cl = open_data(galaxy_cmbkappa_txt_file)
 
-        galaxy_cmbkappa_file_name = '/Cl-f2z{}f1z{}.dat'.format(i, nbins+1)
+        galaxy_cmbkappa_file_name = '/Cl-f2z{}f2z{}.dat'.format(nbins+1, i)
         galaxy_cmbkappa_save_file_name = flask_data_dir + galaxy_cmbkappa_file_name
         np.savetxt(galaxy_cmbkappa_save_file_name, np.transpose([ell, galaxy_cmbkappa_cl]), fmt='%.18f')
 
@@ -221,16 +221,16 @@ def execute(config_dict):
     ]
 
     field_info_cmb_cl = [
-        [1],                      # Weak lensing (for CMB) index number
+        [2],                      # Weak lensing (for CMB) index number
         [nbins+1],                # Bin number - essentially treat as additional lensing bin
         [0],                      # Mean 0 (not using lognormal fields)
         [0],                      # Shift 0 (not using lognormal fields)
-        [2],                      # Weak lensing (for CMB) field type - designation for FLASK
+        [1],                      # Weak lensing (for CMB) field type - designation for FLASK
         [z_boundaries_low[0]],    # Minimum redshift observed
         [1100]                    # Redshift of last scattering surface for CMB
     ]
 
-    field_info_3x2pt = np.concatenate((field_info_wl, field_info_cmb_cl, field_info_gal), axis=1)
+    field_info_3x2pt = np.concatenate((field_info_wl, field_info_gal, field_info_cmb_cl), axis=1)
 
     field_info_3x2pt_filename = 'field_info_3x2pt.dat'
     field_info_wl_filename = 'field_info_wl.dat'
