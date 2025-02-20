@@ -57,10 +57,15 @@ cov_fromsim_path = save_dir + 'cov_fromsim/'
 theory_cl_dir = save_dir + 'theory_cls/'
 noise_save_dir = save_dir + 'measured_noise_cls/'
 
+fname = '10Bin'
+
+cl_like_filemask = save_dir + fname + '.txt'
+
 binmixmat_save_dir = inference_analysis_output_dir + 'bin_mix_mats/'
 if not os.path.exists(binmixmat_save_dir):
     os.makedirs(binmixmat_save_dir)
 
+'''
 cl_like_filemask = inference_analysis_output_dir + 'like_lmaxlike%s_{n_bp}bp.txt' % (output_lmax)
 
 # Unpack CosmoSIS data from grid
@@ -138,7 +143,7 @@ if obs_type == '3X2PT':
         bandpower_edges=None,
         cov_blocks_path=cov_fromsim_path)
         #cov_blocks_path = save_combined_cov_path)
-
+'''
 
 # Generate the posterior distribution
 
@@ -154,5 +159,6 @@ posterior.cl_post(
     nside=nside,
     n_bandpowers=n_bandpowers,
     obs_type=obs_type,
-    plot_save_path=inference_analysis_output_dir+'contours_l{}-{}_{}.png'.format(output_lmin, output_lmax, obs_type)
+    #plot_save_path=inference_analysis_output_dir+'contours_l{}-{}_{}.png'.format(output_lmin, output_lmax, obs_type)
+    plot_save_path=save_dir + fname + '_contours_l{}-{}_{}.png'.format(output_lmin, output_lmax, obs_type)
 )

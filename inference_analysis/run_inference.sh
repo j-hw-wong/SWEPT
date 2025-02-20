@@ -18,7 +18,7 @@ ANGULAR_BINNING_PATH=${PIPELINE_DIR}angular_binning/
 export GAUSSIAN_CL_LIKELIHOOD_PATH
 export ANGULAR_BINNING_PATH
 export PIPELINE_DIR
-
+: '
 echo Setting up parameter grid...
 python setup_inference_grid.py
 echo Done
@@ -26,7 +26,7 @@ echo Done
 echo Running CosmosSIS parameter chains...
 bash run_inference_chains.sh
 echo Done
-
+'
 echo Performing Inference Analysis...
 python inference_analysis.py
 echo Done

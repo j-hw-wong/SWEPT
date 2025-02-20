@@ -37,7 +37,7 @@ cd ${PIPELINE_DIR}/software_utils/
 bash run_cosmosis.sh  &> ${SAVE_DIR}run_cosmosis_log.txt
 echo Done
 cd ${PIPELINE_DIR}/catalogue_sim/
-
+: '
 echo Converting Cosmosis output to Flask input format...
 python conv_fields_cosmosis_flask.py
 echo Done
@@ -70,7 +70,7 @@ do
   echo Done
 
 done
-
+'
 echo Catalogue Simulation Pipeline Complete :\)
 
 duration=$((SECONDS-start))
