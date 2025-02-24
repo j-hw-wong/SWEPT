@@ -44,14 +44,23 @@ def measure_bps_config(pipeline_variables_path):
     no_iter = int(config['measurement_setup']['REALISATIONS'])
     mask_path = str(config['measurement_setup']['PATH_TO_MASK'])
 
-    output_lmin = int(float(config['measurement_setup']['OUTPUT_ELL_MIN']))
-    output_lmax = int(float(config['measurement_setup']['OUTPUT_ELL_MAX']))
+    # output_lmin = int(float(config['measurement_setup']['OUTPUT_ELL_MIN']))
+    # output_lmax = int(float(config['measurement_setup']['OUTPUT_ELL_MAX']))
 
     map_lmin = 0
     map_lmax = (3 * nside) - 1
 
     input_lmin = int(float(config['measurement_setup']['INPUT_ELL_MIN']))
     input_lmax = int(float(config['measurement_setup']['INPUT_ELL_MAX']))
+
+    output_lmin_shear = int(float(config['measurement_setup']['OUTPUT_ELL_MIN_EE']))
+    output_lmax_shear = int(float(config['measurement_setup']['OUTPUT_ELL_MAX_EE']))
+
+    output_lmin_galaxy_shear = int(float(config['measurement_setup']['OUTPUT_ELL_MIN_NE']))
+    output_lmax_galaxy_shear = int(float(config['measurement_setup']['OUTPUT_ELL_MAX_NE']))
+
+    output_lmin_galaxy = int(float(config['measurement_setup']['OUTPUT_ELL_MIN_NN']))
+    output_lmax_galaxy = int(float(config['measurement_setup']['OUTPUT_ELL_MAX_NN']))
 
     n_bandpowers = int(float(config['measurement_setup']['N_BANDPOWERS']))
     bandpower_spacing = str(config['measurement_setup']['BANDPOWER_SPACING'])
@@ -62,14 +71,24 @@ def measure_bps_config(pipeline_variables_path):
         sys.exit()
 
     elif bandpower_spacing == 'log':
-        bp_bin_edges = np.logspace(np.log10(output_lmin + 1e-5), np.log10(output_lmax + 1e-5), n_bandpowers + 1)
+        # bp_bin_edges = np.logspace(np.log10(output_lmin + 1e-5), np.log10(output_lmax + 1e-5), n_bandpowers + 1)
+        bp_bin_edges_galaxy = np.logspace(np.log10(output_lmin_galaxy + 1e-5), np.log10(output_lmax_galaxy + 1e-5), n_bandpowers + 1)
+        bp_bin_edges_galaxy_shear = np.logspace(np.log10(output_lmin_galaxy_shear + 1e-5), np.log10(output_lmax_galaxy_shear + 1e-5), n_bandpowers + 1)
+        bp_bin_edges_shear = np.logspace(np.log10(output_lmin_shear + 1e-5), np.log10(output_lmax_shear + 1e-5), n_bandpowers + 1)
 
     elif bandpower_spacing == 'lin':
-        bp_bin_edges = np.linspace(output_lmin + 1e-5, output_lmax + 1e-5, n_bandpowers + 1)
+        # bp_bin_edges = np.linspace(output_lmin + 1e-5, output_lmax + 1e-5, n_bandpowers + 1)
+        bp_bin_edges_galaxy = np.linspace(output_lmin_galaxy + 1e-5, output_lmax_galaxy + 1e-5, n_bandpowers + 1)
+        bp_bin_edges_galaxy_shear = np.linspace(output_lmin_galaxy_shear + 1e-5, output_lmax_galaxy_shear + 1e-5, n_bandpowers + 1)
+        bp_bin_edges_shear = np.linspace(output_lmin_shear + 1e-5, output_lmax_shear + 1e-5, n_bandpowers + 1)
 
     elif bandpower_spacing == 'custom':
         # Placeholder at the moment!!!
         bp_bin_edges = np.empty(n_bandpowers)
+        bp_bin_edges_galaxy = np.empty(n_bandpowers)
+        bp_bin_edges_galaxy_shear = np.empty(n_bandpowers)
+        bp_bin_edges_shear = np.empty(n_bandpowers)
+
         print('Need to figure out how to do something. Future JWong todo.')
         # I think it should probably be something like set_variables.ini points to a file in which the bandpower edges
         # are stored. Probably need to think about format for this. Also where to calculate this? Or just let user do
@@ -83,19 +102,52 @@ def measure_bps_config(pipeline_variables_path):
         # Bandpower type not recognised
         sys.exit()
 
-    eff_bp_bin_edges = np.ceil(bp_bin_edges)
-    eff_bp_bin_edges = eff_bp_bin_edges.astype(int)
+    # eff_bp_bin_edges = np.ceil(bp_bin_edges)
+    # eff_bp_bin_edges = eff_bp_bin_edges.astype(int)
+    #
+    # eff_bp_bin_edges_lo = eff_bp_bin_edges[:-1]
+    # eff_bp_bin_edges_hi = eff_bp_bin_edges[1:]
+    #
+    # bp_bins = nmt.NmtBin.from_edges(ell_ini=eff_bp_bin_edges_lo, ell_end=eff_bp_bin_edges_hi)
+    # ell_arr = bp_bins.get_effective_ells()
 
-    eff_bp_bin_edges_lo = eff_bp_bin_edges[:-1]
-    eff_bp_bin_edges_hi = eff_bp_bin_edges[1:]
+    bp_bins_galaxy = nmt.NmtBin.from_edges(
+        ell_ini=np.ceil(bp_bin_edges_galaxy).astype(int)[:-1],
+        ell_end=np.ceil(bp_bin_edges_galaxy).astype(int)[1:])
+    ell_arr_galaxy = bp_bins_galaxy.get_effective_ells()
 
-    bp_bins = nmt.NmtBin.from_edges(ell_ini=eff_bp_bin_edges_lo, ell_end=eff_bp_bin_edges_hi)
-    ell_arr = bp_bins.get_effective_ells()
+    bp_bins_galaxy_shear = nmt.NmtBin.from_edges(
+        ell_ini=np.ceil(bp_bin_edges_galaxy_shear).astype(int)[:-1],
+        ell_end=np.ceil(bp_bin_edges_galaxy_shear).astype(int)[1:])
+    ell_arr_galaxy_shear = bp_bins_galaxy_shear.get_effective_ells()
 
-    pbl = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+    bp_bins_shear = nmt.NmtBin.from_edges(
+        ell_ini=np.ceil(bp_bin_edges_shear).astype(int)[:-1],
+        ell_end=np.ceil(bp_bin_edges_shear).astype(int)[1:])
+    ell_arr_shear = bp_bins_shear.get_effective_ells()
+
+    # pbl = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+    #     n_bandpowers=n_bandpowers,
+    #     output_lmin=output_lmin,
+    #     output_lmax=output_lmax,
+    #     bp_spacing=bandpower_spacing)
+
+    pbl_shear = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
         n_bandpowers=n_bandpowers,
-        output_lmin=output_lmin,
-        output_lmax=output_lmax,
+        output_lmin=output_lmin_shear,
+        output_lmax=output_lmax_shear,
+        bp_spacing=bandpower_spacing)
+
+    pbl_galaxy_shear = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+        n_bandpowers=n_bandpowers,
+        output_lmin=output_lmin_galaxy_shear,
+        output_lmax=output_lmax_galaxy_shear,
+        bp_spacing=bandpower_spacing)
+
+    pbl_galaxy = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+        n_bandpowers=n_bandpowers,
+        output_lmin=output_lmin_galaxy,
+        output_lmax=output_lmax_galaxy,
         bp_spacing=bandpower_spacing)
 
     # Prepare config dictionary
@@ -104,17 +156,32 @@ def measure_bps_config(pipeline_variables_path):
         'nbins': nbins,
         'no_iter': no_iter,
         'mask_path': mask_path,
-        'output_lmin': output_lmin,
-        'output_lmax': output_lmax,
+        # 'output_lmin': output_lmin,
+        # 'output_lmax': output_lmax,
         'input_lmin': input_lmin,
         'input_lmax': input_lmax,
         'map_lmin': map_lmin,
         'map_lmax': map_lmax,
         'n_bandpowers': n_bandpowers,
-        'bp_bins': bp_bins,
+        # 'bp_bins': bp_bins,
         'bandpower_spacing': bandpower_spacing,
-        'ell_arr': ell_arr,
-        'pbl': pbl
+        # 'ell_arr': ell_arr,
+        # 'pbl': pbl,
+        'output_lmin_shear': output_lmin_shear,
+        'output_lmax_shear': output_lmax_shear,
+        'pbl_shear': pbl_shear,
+        'bp_bins_shear': bp_bins_shear,
+        'ell_arr_shear': ell_arr_shear,
+        'output_lmin_galaxy_shear': output_lmin_galaxy_shear,
+        'output_lmax_galaxy_shear': output_lmax_galaxy_shear,
+        'pbl_galaxy_shear': pbl_galaxy_shear,
+        'bp_bins_galaxy_shear': bp_bins_galaxy_shear,
+        'ell_arr_galaxy_shear': ell_arr_galaxy_shear,
+        'output_lmin_galaxy': output_lmin_galaxy,
+        'output_lmax_galaxy': output_lmax_galaxy,
+        'pbl_galaxy': pbl_galaxy,
+        'bp_bins_galaxy': bp_bins_galaxy,
+        'ell_arr_galaxy': ell_arr_galaxy
     }
 
     return config_dict
@@ -329,8 +396,8 @@ def create_null_spectras(nbins, lmin, lmax, output_dir):
                        np.transpose(null_cls))
 
 
-def process_00_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_i, bin_j, obs_mask_path, bp_bins,
-                    ell_arr, pbl):
+def process_00_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_i, bin_j, obs_mask_path, output_lmin,
+                    output_lmax, bp_bins, ell_arr, pbl):
 
     """
     Function to convert fiducial full-sky 00 components of the 3x2pt power spectra into predicted Pseudo-bandpowers.
@@ -355,8 +422,8 @@ def process_00_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
     Saves fiducial model of the 3x2pt 00 Pseudo bandpowers that include contribution from the expected noise
     """
 
-    output_lmin = config_dict['output_lmin']
-    output_lmax = config_dict['output_lmax']
+    # output_lmin = config_dict['output_lmin']
+    # output_lmax = config_dict['output_lmax']
     input_lmin = config_dict['input_lmin']
     input_lmax = config_dict['input_lmax']
     map_lmin = config_dict['map_lmin']
@@ -404,8 +471,8 @@ def process_00_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
                    np.transpose(ell_arr))
 
 
-def process_02_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_i, bin_j, obs_mask_path, bp_bins,
-                    ell_arr, pbl):
+def process_02_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_i, bin_j, obs_mask_path, output_lmin,
+                    output_lmax, bp_bins, ell_arr, pbl):
 
     """
     Function to convert fiducial full-sky 02 components of the 3x2pt power spectra into predicted Pseudo-bandpowers.
@@ -430,8 +497,8 @@ def process_02_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
     Saves fiducial model of the 3x2pt 02 Pseudo bandpowers that include contribution from the expected noise.
     """
 
-    output_lmin = config_dict['output_lmin']
-    output_lmax = config_dict['output_lmax']
+    # output_lmin = config_dict['output_lmin']
+    # output_lmax = config_dict['output_lmax']
     input_lmin = config_dict['input_lmin']
     input_lmax = config_dict['input_lmax']
     map_lmin = config_dict['map_lmin']
@@ -530,8 +597,8 @@ def process_02_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
                    np.transpose(ell_arr))
 
 
-def process_22_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_i, bin_j, obs_mask_path, bp_bins,
-                    ell_arr, pbl):
+def process_22_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_i, bin_j, obs_mask_path, output_lmin,
+                    output_lmax, bp_bins, ell_arr, pbl):
 
     """
     Function to convert fiducial full-sky 22 components of the 3x2pt power spectra into predicted Pseudo-bandpowers.
@@ -556,8 +623,8 @@ def process_22_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
     Saves fiducial model of the 3x2pt 22 Pseudo bandpowers that include contribution from the expected noise.
     """
 
-    output_lmin = config_dict['output_lmin']
-    output_lmax = config_dict['output_lmax']
+    # output_lmin = config_dict['output_lmin']
+    # output_lmax = config_dict['output_lmax']
     input_lmin = config_dict['input_lmin']
     input_lmax = config_dict['input_lmax']
     map_lmin = config_dict['map_lmin']
@@ -636,16 +703,34 @@ def main():
     mask_path = config_dict['mask_path']
 
     n_bandpowers = config_dict['n_bandpowers']
-    bp_bins = config_dict['bp_bins']
-    ell_arr = config_dict['ell_arr']
-    pbl = config_dict['pbl']
-
-    output_lmin = config_dict['output_lmin']
-    output_lmax = config_dict['output_lmax']
+    # bp_bins = config_dict['bp_bins']
+    # ell_arr = config_dict['ell_arr']
+    # pbl = config_dict['pbl']
+    #
+    # output_lmin = config_dict['output_lmin']
+    # output_lmax = config_dict['output_lmax']
     input_lmin = config_dict['input_lmin']
     input_lmax = config_dict['input_lmax']
     map_lmin = config_dict['map_lmin']
     map_lmax = config_dict['map_lmax']
+
+    output_lmin_shear = config_dict['output_lmin_shear']
+    output_lmax_shear = config_dict['output_lmax_shear']
+    pbl_shear = config_dict['pbl_shear']
+    bp_bins_shear = config_dict['bp_bins_shear']
+    ell_arr_shear = config_dict['ell_arr_shear']
+
+    output_lmin_galaxy_shear = config_dict['output_lmin_galaxy_shear']
+    output_lmax_galaxy_shear = config_dict['output_lmax_galaxy_shear']
+    pbl_galaxy_shear = config_dict['pbl_galaxy_shear']
+    bp_bins_galaxy_shear = config_dict['bp_bins_galaxy_shear']
+    ell_arr_galaxy_shear = config_dict['ell_arr_galaxy_shear']
+
+    output_lmin_galaxy = config_dict['output_lmin_galaxy']
+    output_lmax_galaxy = config_dict['output_lmax_galaxy']
+    pbl_galaxy = config_dict['pbl_galaxy']
+    bp_bins_galaxy = config_dict['bp_bins_galaxy']
+    ell_arr_galaxy = config_dict['ell_arr_galaxy']
 
     # Define some paths to extract data on disk and save measured quantities.
 
@@ -664,12 +749,23 @@ def main():
     y2y1_bps_dir = shear_bps_dir + 'Cl_BE/'
     y2_bps_dir = shear_bps_dir + 'Cl_BB/'
 
-    for folder in [gal_bps_dir, shear_bps_dir, gal_shear_bps_dir, k_bps_dir, y1_bps_dir, y1y2_bps_dir, y2y1_bps_dir,
-                   y2_bps_dir]:
+    for folder in [gal_bps_dir]:
         if not os.path.exists(folder):
             os.makedirs(folder)
         np.savetxt(folder + 'ell.txt',
-                   np.transpose(ell_arr))
+                   np.transpose(ell_arr_galaxy))
+
+    for folder in [gal_shear_bps_dir]:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        np.savetxt(folder + 'ell.txt',
+                   np.transpose(ell_arr_galaxy_shear))
+
+    for folder in [shear_bps_dir, k_bps_dir, y1_bps_dir, y1y2_bps_dir, y2y1_bps_dir, y2_bps_dir]:
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        np.savetxt(folder + 'ell.txt',
+                   np.transpose(ell_arr_galaxy))
 
     gal_cl_dir = recov_cat_cls_dir + 'galaxy_cl/'
     shear_cl_dir = recov_cat_cls_dir + 'shear_cl/'
@@ -707,14 +803,14 @@ def main():
                     obs_cls_dir=obs_gal_shear_cl_dir + 'iter_{}/'.format(it + 1),
                     bin_i=i + 1,
                     bin_j=j + 1,
-                    lmin_out=output_lmin,
-                    lmax_out=output_lmax)
+                    lmin_out=output_lmin_galaxy_shear,
+                    lmax_out=output_lmax_galaxy_shear)
                 # save bp array here
                 cl_to_bp(cl_dir=obs_gal_shear_cl_dir + 'iter_{}/'.format(it + 1),
                          bp_dir=gal_shear_bp_it_dir,
                          bin_i=i + 1,
                          bin_j=j + 1,
-                         pbl=pbl)
+                         pbl=pbl_galaxy_shear)
                 if i >= j:
 
                     measured_cls_to_obs_cls(
@@ -722,14 +818,14 @@ def main():
                         obs_cls_dir=obs_gal_cl_dir + 'iter_{}/'.format(it + 1),
                         bin_i=i + 1,
                         bin_j=j + 1,
-                        lmin_out=output_lmin,
-                        lmax_out=output_lmax)
+                        lmin_out=output_lmin_galaxy,
+                        lmax_out=output_lmax_galaxy)
 
                     cl_to_bp(cl_dir=obs_gal_cl_dir + 'iter_{}/'.format(it + 1),
                              bp_dir=gal_bp_it_dir,
                              bin_i=i + 1,
                              bin_j=j + 1,
-                             pbl=pbl)
+                             pbl=pbl_galaxy)
 
                     for shear_component_dir in ['Cl_TT/', 'Cl_EE/', 'Cl_EB/', 'Cl_BE/', 'Cl_BB/']:
                         shear_cl_it_dir = shear_cl_dir + shear_component_dir + 'iter_{}/'.format(it + 1)
@@ -740,14 +836,14 @@ def main():
                             obs_cls_dir=obs_shear_cl_dir + shear_component_dir + 'iter_{}/'.format(it + 1),
                             bin_i=i + 1,
                             bin_j=j + 1,
-                            lmin_out=output_lmin,
-                            lmax_out=output_lmax)
+                            lmin_out=output_lmin_shear,
+                            lmax_out=output_lmax_shear)
 
                         cl_to_bp(cl_dir=obs_shear_cl_dir + shear_component_dir + 'iter_{}/'.format(it + 1),
                                  bp_dir=shear_bp_it_dir,
                                  bin_i=i + 1,
                                  bin_j=j + 1,
-                                 pbl=pbl)
+                                 pbl=pbl_shear)
 
     # Now convert Cls to bandpowers for the average Cl quantities, and generate theoretical prediction for bandpowers
     for i in range(nbins):
@@ -759,19 +855,19 @@ def main():
                 obs_cls_dir=obs_gal_shear_cl_dir,
                 bin_i=i + 1,
                 bin_j=j + 1,
-                lmin_out=output_lmin,
-                lmax_out=output_lmax)
+                lmin_out=output_lmin_galaxy_shear,
+                lmax_out=output_lmax_galaxy_shear)
 
             measured_cls_to_obs_cls(
                 measured_cls_dir=noise_cls_dir + 'galaxy_shear_cl/',
                 obs_cls_dir=obs_noise_cls_dir + 'galaxy_shear_cl/',
                 bin_i=i + 1,
                 bin_j=j + 1,
-                lmin_out=output_lmin,
-                lmax_out=output_lmax)
+                lmin_out=output_lmin_galaxy_shear,
+                lmax_out=output_lmax_galaxy_shear)
 
             # Convert Pseudo-Cl for measured GGL into bandpower
-            cl_to_bp(cl_dir=obs_gal_shear_cl_dir, bp_dir=gal_shear_bps_dir, bin_i=i + 1, bin_j=j + 1, pbl=pbl)
+            cl_to_bp(cl_dir=obs_gal_shear_cl_dir, bp_dir=gal_shear_bps_dir, bin_i=i + 1, bin_j=j + 1, pbl=pbl_galaxy_shear)
             calc_stdem_bps(bp_dir=gal_shear_bps_dir, n_bps=n_bandpowers, bin_i=i + 1, bin_j=j + 1, realisations=no_iter)
 
             # Calculate the theoretical PCl bandpower for the fiducial full-sky GGL
@@ -783,9 +879,11 @@ def main():
                 bin_i=i + 1,
                 bin_j=j + 1,
                 obs_mask_path=mask_path,
-                bp_bins=bp_bins,
-                ell_arr=ell_arr,
-                pbl=pbl)
+                output_lmin=output_lmin_galaxy_shear,
+                output_lmax=output_lmax_galaxy_shear,
+                bp_bins=bp_bins_galaxy_shear,
+                ell_arr=ell_arr_galaxy_shear,
+                pbl=pbl_galaxy_shear)
 
             if i >= j:
 
@@ -794,18 +892,18 @@ def main():
                     obs_cls_dir=obs_gal_cl_dir,
                     bin_i=i + 1,
                     bin_j=j + 1,
-                    lmin_out=output_lmin,
-                    lmax_out=output_lmax)
+                    lmin_out=output_lmin_galaxy,
+                    lmax_out=output_lmax_galaxy)
 
                 measured_cls_to_obs_cls(
                     measured_cls_dir=noise_cls_dir + 'galaxy_cl/',
                     obs_cls_dir=obs_noise_cls_dir + 'galaxy_cl/',
                     bin_i=i + 1,
                     bin_j=j + 1,
-                    lmin_out=output_lmin,
-                    lmax_out=output_lmax)
+                    lmin_out=output_lmin_galaxy,
+                    lmax_out=output_lmax_galaxy)
 
-                cl_to_bp(cl_dir=obs_gal_cl_dir, bp_dir=gal_bps_dir, bin_i=i + 1, bin_j=j + 1, pbl=pbl)
+                cl_to_bp(cl_dir=obs_gal_cl_dir, bp_dir=gal_bps_dir, bin_i=i + 1, bin_j=j + 1, pbl=pbl_galaxy)
                 calc_stdem_bps(bp_dir=gal_bps_dir, n_bps=n_bandpowers, bin_i=i + 1, bin_j=j + 1,
                                realisations=no_iter)
 
@@ -817,33 +915,35 @@ def main():
                     bin_i=i + 1,
                     bin_j=j + 1,
                     obs_mask_path=mask_path,
-                    bp_bins=bp_bins,
-                    ell_arr=ell_arr,
-                    pbl=pbl)
+                    output_lmin=output_lmin_galaxy,
+                    output_lmax=output_lmax_galaxy,
+                    bp_bins=bp_bins_galaxy,
+                    ell_arr=ell_arr_galaxy,
+                    pbl=pbl_galaxy)
 
                 measured_cls_to_obs_cls(
                     measured_cls_dir=noise_cls_dir + 'shear_cl/',
                     obs_cls_dir=obs_noise_cls_dir + 'shear_cl/',
                     bin_i=i + 1,
                     bin_j=j + 1,
-                    lmin_out=output_lmin,
-                    lmax_out=output_lmax)
-                
+                    lmin_out=output_lmin_shear,
+                    lmax_out=output_lmax_shear)
+
                 for shear_component_dir in ['Cl_TT/', 'Cl_EE/', 'Cl_EB/', 'Cl_BE/', 'Cl_BB/']:
                     measured_cls_to_obs_cls(
                         measured_cls_dir=shear_cl_dir + shear_component_dir,
                         obs_cls_dir=obs_shear_cl_dir + shear_component_dir,
                         bin_i=i + 1,
                         bin_j=j + 1,
-                        lmin_out=output_lmin,
-                        lmax_out=output_lmax)
+                        lmin_out=output_lmin_shear,
+                        lmax_out=output_lmax_shear)
 
                     cl_to_bp(
                         cl_dir=obs_shear_cl_dir + shear_component_dir,
                         bp_dir=shear_bps_dir + shear_component_dir,
                         bin_i=i + 1,
                         bin_j=j + 1,
-                        pbl=pbl)
+                        pbl=pbl_shear)
 
                     calc_stdem_bps(bp_dir=shear_bps_dir + shear_component_dir, n_bps=n_bandpowers, bin_i=i + 1,
                                    bin_j=j + 1, realisations=no_iter)
@@ -857,9 +957,11 @@ def main():
                         bin_i=i + 1,
                         bin_j=j + 1,
                         obs_mask_path=mask_path,
-                        bp_bins=bp_bins,
-                        ell_arr=ell_arr,
-                        pbl=pbl)
+                        output_lmin=output_lmin_shear,
+                        output_lmax=output_lmax_shear,
+                        bp_bins=bp_bins_shear,
+                        ell_arr=ell_arr_shear,
+                        pbl=pbl_shear)
 
 
 if __name__ == '__main__':

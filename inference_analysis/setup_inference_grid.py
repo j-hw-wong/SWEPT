@@ -29,14 +29,14 @@ n_chains = int(float(config['inference_analysis_params']['N_CHAINS']))
 
 params = {
     'cosmological_parameters--w': {
-        'min': -1.3,
-        'max': -0.7,
-        'steps': 4
+        'min': -1.5,
+        'max': -0.5,
+        'steps': 49
     },
     'cosmological_parameters--wa': {
         'min': -0.75,
         'max': 0.75,
-        'steps': 4
+        'steps': 49
     }
 }
 

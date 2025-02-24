@@ -566,7 +566,7 @@ def like_bp_gauss_mix_loop_nbin_create_obs(
     print(f'All done at {time.strftime("%c")}')
 
 
-def like_bp_gauss_mix_loop_nbin(grid_dir, n_bps, n_zbin, lmax_like, lmin_like, lmax_in, lmin_in, fid_pos_pos_dir,
+def like_bp_gauss_mix_loop_nbin_old(grid_dir, n_bps, n_zbin, lmax_like, lmin_like, lmax_in, lmin_in, fid_pos_pos_dir,
                                 fid_she_she_dir, fid_pos_she_dir, noise_path, mixmats_path,
                                 bp_cov_filemask, binmixmat_save_dir, varied_params, like_save_dir,
                                 obs_bandpowers_dir, bandpower_spacing='log', bandpower_edges=None,
@@ -654,6 +654,8 @@ def like_bp_gauss_mix_loop_nbin(grid_dir, n_bps, n_zbin, lmax_like, lmin_like, l
         mixmat_ee_to_ee = data['mixmat_ee_to_ee'][lowl_skip:, :]
         mixmat_bb_to_ee = data['mixmat_bb_to_ee'][lowl_skip:, :]
     mixmat_shape = (n_ell_like, n_ell_in)
+
+    print(mixmat_nn_to_nn.shape)
 
     assert mixmat_nn_to_nn.shape == mixmat_shape, (mixmat_nn_to_nn.shape, mixmat_shape)
     assert mixmat_ne_to_ne.shape == mixmat_shape, (mixmat_ne_to_ne.shape, mixmat_shape)
@@ -842,10 +844,319 @@ def like_bp_gauss_mix_loop_nbin(grid_dir, n_bps, n_zbin, lmax_like, lmin_like, l
         '''
     print(f'All done at {time.strftime("%c")}')
 
+
+def like_bp_gauss_mix_loop_nbin(grid_dir, n_bps, n_zbin, lmax_like_nn, lmin_like_nn, lmax_like_ne, lmin_like_ne,
+                                lmax_like_ee, lmin_like_ee, lmax_in, lmin_in, fid_pos_pos_dir,
+                                fid_she_she_dir, fid_pos_she_dir, noise_path, mixmats_path,
+                                bp_cov_filemask, binmixmat_save_dir, varied_params, like_save_dir,
+                                obs_bandpowers_dir, bandpower_spacing='log', bandpower_edges=None,
+                                cov_blocks_path=None):
+
+    """
+    Run the like_bp_gauss_mix likelihood module over a CosmoSIS grid repeatedly for different numbers of bandpowers,
+    saving a separate likelihood file for each number of bandpowers. This function assumes you are inputting some
+    observed set of Pseudo-Cl Bandpowers
+
+    Args:
+        grid_dir (str): Path to CosmoSIS grid.
+        n_bps (list): List of numbers of bandpowers.
+        n_zbin (int): Number of redshift bins.
+        lmax_like (int): Maximum l to use in the likelihood.
+        lmin_like (int): Minimum l to use in the likelihood.
+        lmax_in (int): Maximum l included in mixing.
+        lmin_in (int): Minimum l supplied in theory and noise power spectra.
+        fid_pos_pos_dir (str): Path to fiducial position-position power spectra.
+        fid_she_she_dir (str): Path to fiducial shear-shear power spectra.
+        fid_pos_she_dir (str): Path to fiducial position-shear power spectra.
+        noise_path (str): Path to directory containing noise power spectra for each of gal, shear, gal_shear Cls.
+        mixmats_path (str): Path to mixing matrices in numpy .npz file with four arrays (mixmat_nn_to_nn,
+                            mixmat_ne_to_ne, mixmat_ee_to_ee, mixmat_bb_to_ee) each with shape
+                            (lmax_like - lmin_in + 1, lmax_in - lmin_in + 1).
+        bp_cov_filemask (str): Path to precomputed bandpower covariance with {n_bp} placeholder, in numpy .npz file with
+                               array name cov, with shape (n_data, n_data) where n_data = n_spectra * n_bandpowers.
+        binmixmat_save_dir (str): Path to directory into which to save combined mixing and binning matrices, which are
+                                  then loaded inside the likelihood module.
+        varied_params (list): List of CosmoSIS parameter names whose values are varied across the grid.
+        like_save_dir (str): Path to directory into which to save likelihood files, one for each number of bandpowers.
+        obs_bandpowers_dir (str,): Path(s) to a user-specified observed 3x2pt data-vector.
+                                   File must be .npz format containing 3x2pt spectra
+                                   ordered in diagonal-major structure consistent with the rest of
+                                   angular_binning module. See 'conv_3x2pt_spectra.py' for convenience
+                                   function written by JHWW that converts CosmoSIS 3x2pt output spectra
+                                   structure into the format required for angular_binning module. NB - no.
+                                   files must be equal to the number of bandpowers looped over, and each file
+                                   must be named 'obs_{n}bp.npz' where n is the no. bandpowers
+        bandpower_spacing (str, optional): Method to divide bandpowers in ell-space. Must be one of 'log' (for log-
+                                           spaced bandpowers); 'lin' (for linearly spaced bandpowers); or 'custom' for
+                                           a user specified bandpower spacing. Default is 'log'. If 'custom', the
+                                           bandpower bin-boundaries must be specified in the bandpower_edges argument.
+        bandpower_edges (list, optional): List detailing the bandpower edges in ell-space used for analysis if
+                                          bandpower_spacing is set to 'custom'. Default is None. If supplied, the list
+                                          must detail the arrays of bandpower edges in ell-space for all number of
+                                          bandpowers considered in loop. I.e. if n_bps = [3,4,5] then bandpower edges
+                                          must be of form [bp_edges_3bp, bp_edges_4bp, bp_edges_5bp]. For each
+                                          array within this list, the ells for each bandpower must follow
+                                          [ell_lower, ell_upper) in the NaMaster format. So e.g. if bp_edges_3bp =
+                                          [2, 5, 10, 21] then 1st bandpower covers 2<=l<5, 2nd bandpower covers 5<=l<10
+                                          and third bandpower covers 10<=l<21. I.e. min(bp_edges)=lmin_like,
+                                          max(bp_edges)=1+lmax. CAUTION: THIS NEEDS TESTING + VALIDATING!
+    """
+
+    print(f'Starting at {time.strftime("%c")}')
+
+    # Calculate some useful quantities
+    n_field = 2 * n_zbin
+    n_spec = n_field * (n_field + 1) // 2
+    # n_ell_like = lmax_like - lmin_like + 1
+    n_ell_in = lmax_in - lmin_in + 1
+    ell_in = np.arange(lmin_in, lmax_in + 1)
+
+    # Form list of power spectra
+    print('Forming list of power spectra')
+    fields = [f'{f}{z}' for z in range(1, n_zbin + 1) for f in ['N', 'E']]
+
+    assert len(fields) == n_field
+    spectra = [fields[row] + fields[row + diag] for diag in range(n_field) for row in range(n_field - diag)]
+    assert len(spectra) == n_spec
+
+    # Load fiducial Cls
+    print(f'Loading fiducial Cls at {time.strftime("%c")}')
+    fid_cl = like_bp.load_spectra(n_zbin, fid_pos_pos_dir, fid_she_she_dir, fid_pos_she_dir, lmax_in, lmin_in)
+    fid_cl = fid_cl[:, lmin_in:]
+    assert fid_cl.shape == (n_spec, n_ell_in)
+
+    # Load mixing matrices
+    print(f'Loading mixing matrices at {time.strftime("%c")}')
+    # lowl_skip = lmin_like - lmin_in
+    with np.load(mixmats_path) as data:
+        mixmat_nn_to_nn = data['mixmat_nn_to_nn'][lmin_like_nn - lmin_in:, :]
+        mixmat_ne_to_ne = data['mixmat_ne_to_ne'][lmin_like_ne - lmin_in:, :]
+        mixmat_ee_to_ee = data['mixmat_ee_to_ee'][lmin_like_ee - lmin_in:, :]
+        mixmat_bb_to_ee = data['mixmat_bb_to_ee'][lmin_like_ee - lmin_in:, :]
+
+    mixmat_shape_nn = (lmax_like_nn - lmin_like_nn + 1, n_ell_in)
+    mixmat_shape_ne = (lmax_like_ne - lmin_like_ne + 1, n_ell_in)
+    mixmat_shape_ee = (lmax_like_ee - lmin_like_ee + 1, n_ell_in)
+
+    assert mixmat_nn_to_nn.shape == mixmat_shape_nn, (mixmat_nn_to_nn.shape, mixmat_shape_nn)
+    assert mixmat_ne_to_ne.shape == mixmat_shape_ne, (mixmat_ne_to_ne.shape, mixmat_shape_ne)
+    assert mixmat_ee_to_ee.shape == mixmat_shape_ee, (mixmat_ee_to_ee.shape, mixmat_shape_ee)
+    assert mixmat_bb_to_ee.shape == mixmat_shape_ee, (mixmat_bb_to_ee.shape, mixmat_shape_ee)
+
+    # Amendment by JW on 20/01/2023
+    # We want to have an option for the user to supply their own observation data - add in as an argument to the function
+
+    # Iterate over numbers of bandpowers
+    #for n_bp in n_bps:
+    for bp_count, n_bp in enumerate(n_bps):
+        print(f'Starting n_bp = {n_bp} at {time.strftime("%c")}')
+
+        # Form binning matrix
+        print(f'{n_bp}bp: Forming binning matrix at {time.strftime("%c")}')
+        #pbl = gaussian_cl_likelihood.python.simulation.get_binning_matrix(n_bp, lmin_like, lmax_like)
+
+        if bandpower_edges is None:
+            assert bandpower_spacing == 'log' or bandpower_spacing == 'lin'
+            # pbl = gaussian_cl_likelihood.python.simulation.get_binning_matrix(n_bp, lmin_like, lmax_like,
+            #                                                                 bp_spacing=bandpower_spacing)
+
+            pbl_ee = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+                n_bandpowers=n_bp,
+                output_lmin=lmin_like_ee,
+                output_lmax=lmax_like_ee,
+                bp_spacing=bandpower_spacing)
+
+            pbl_ne = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+                n_bandpowers=n_bp,
+                output_lmin=lmin_like_ne,
+                output_lmax=lmax_like_ne,
+                bp_spacing=bandpower_spacing)
+
+            pbl_nn = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+                n_bandpowers=n_bp,
+                output_lmin=lmin_like_nn,
+                output_lmax=lmax_like_nn,
+                bp_spacing=bandpower_spacing)
+
+        #elif bandpower_edges is not None:
+        else:
+            assert bandpower_spacing == 'custom' # THIS IS NOT STABLE OR TESTED/DEVELOPED AT ALL YET 21/02/2025
+            # pbl = gaussian_cl_likelihood.python.simulation.get_binning_matrix(n_bp, lmin_like, lmax_like,
+            #                                                                   bp_spacing=bandpower_spacing,
+            #                                                                   bp_edges=bandpower_edges[bp_count])
+
+            pbl_ee = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+                n_bandpowers=n_bp,
+                output_lmin=lmin_like_ee,
+                output_lmax=lmax_like_ee,
+                bp_spacing=bandpower_spacing,
+                bp_edges=bandpower_edges[bp_count])
+
+            pbl_ne = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+                n_bandpowers=n_bp,
+                output_lmin=lmin_like_ne,
+                output_lmax=lmax_like_ne,
+                bp_spacing=bandpower_spacing,
+                bp_edges=bandpower_edges[bp_count])
+
+            pbl_nn = gaussian_cl_likelihood.python.simulation.get_binning_matrix(
+                n_bandpowers=n_bp,
+                output_lmin=lmin_like_nn,
+                output_lmax=lmax_like_nn,
+                bp_spacing=bandpower_spacing,
+                bp_edges=bandpower_edges[bp_count])
+
+        if pbl_nn.ndim == 1:
+            pbl_nn = pbl_nn[np.newaxis, :]
+
+        if pbl_ne.ndim == 1:
+            pbl_ne = pbl_ne[np.newaxis, :]
+
+        if pbl_ee.ndim == 1:
+            pbl_ee = pbl_ee[np.newaxis, :]
+
+        assert pbl_nn.shape == (n_bp, lmax_like_nn - lmin_like_nn + 1)
+        assert pbl_ne.shape == (n_bp, lmax_like_ne - lmin_like_ne + 1)
+        assert pbl_ee.shape == (n_bp, lmax_like_ee - lmin_like_ee + 1)
+
+        # Form combined binning and mixing matrices
+        print(f'{n_bp}bp: Forming combined binning and mixing matrices at {time.strftime("%c")}')
+        binmix_nn_to_nn = pbl_nn @ mixmat_nn_to_nn
+        binmix_ne_to_ne = pbl_ne @ mixmat_ne_to_ne
+        binmix_ee_to_ee = pbl_ee @ mixmat_ee_to_ee
+        binmix_bb_to_ee = pbl_ee @ mixmat_bb_to_ee
+        binmix_shape = (n_bp, n_ell_in)
+        assert binmix_nn_to_nn.shape == binmix_shape
+        assert binmix_ne_to_ne.shape == binmix_shape
+        assert binmix_ee_to_ee.shape == binmix_shape
+        assert binmix_bb_to_ee.shape == binmix_shape
+
+        # Save combined binning and mixing matrices to disk
+        # bmm_filename = f'binmix_lminin{lmin_in}_lmaxin{lmax_in}_lminlike{lmin_like}_lmaxlike{lmax_like}_{n_bp}bp.npz'
+        # binmixmat_path = os.path.join(binmixmat_save_dir, bmm_filename)
+        # binmixmat_header = (f'Combined binning and mixing matrices output by {__file__} for '
+        #                     f'mixmats_path = {mixmats_path}, lmin_in = {lmin_in}, lmax_in = {lmax_in}, '
+        #                     f'lmin_like = {lmin_like}, lmax_like = {lmax_like}, n_bp = {n_bp}, '
+        #                     f'at {time.strftime("%c")}')
+        # np.savez_compressed(binmixmat_path, binmix_tt_to_tt=binmix_nn_to_nn, binmix_te_to_te=binmix_ne_to_ne,
+        #                     binmix_ee_to_ee=binmix_ee_to_ee, binmix_bb_to_ee=binmix_bb_to_ee, header=binmixmat_header)
+        # print(f'{n_bp}bp: Saved combined binnning and mixing matrices to {binmixmat_path} at {time.strftime("%c")}')
+        #
+        assert obs_bandpowers_dir is not None
+        print('Reading in observation')
+        obs_bp_path = os.path.join(obs_bandpowers_dir, f'obs_{n_bp}bp.npz')
+        # print(obs_bp_path)
+        # # Setup the likelihood module
+        print(f'{n_bp}bp: Setting up likelihood module at {time.strftime("%c")}')
+        bp_cov_path = bp_cov_filemask.format(n_bp=n_bp)
+
+        config = like_bp_mix.setup(
+            obs_bp_path=obs_bp_path,
+            mixmats=[mixmat_nn_to_nn, mixmat_ne_to_ne, mixmat_ee_to_ee, mixmat_bb_to_ee],
+            mix_lmin=lmin_in,
+            cov_path=bp_cov_path,
+            pos_nl_path=None,
+            she_nl_path=None,
+            noise_lmin=lmin_in,
+            input_lmin=lmin_in,
+            input_lmax=lmax_in,
+            n_zbin=n_zbin)
+        print(f'{n_bp}bp: Setup complete at {time.strftime("%c")}')
+
+        # Loop over every input directory
+        source_dirs = glob.glob(os.path.join(grid_dir, '_[0-9]*/'))
+        n_dirs = len(source_dirs)
+        if n_dirs == 0:
+            warnings.warn(f'{n_bp}bp: No matching directories. Terminating at {time.strftime("%c")}')
+            return
+        n_params = len(varied_params)
+        if n_params == 0:
+            warnings.warn(f'{n_bp}bp: No parameters specified. Terminating at {time.strftime("%c")}')
+            return
+        res = []
+
+        exp_bps_grid = []
+        for i, source_dir in enumerate(source_dirs):
+            print(f'{n_bp}bp: Calculating likelihood {i + 1} / {n_dirs} at {time.strftime("%c")}')
+
+            # Extract cosmological parameters
+            params = [None]*n_params
+            values_path = os.path.join(source_dir, 'cosmological_parameters/values.txt')
+            with open(values_path, encoding='ascii') as f:
+                for line in f:
+                    for param_idx, param in enumerate(varied_params):
+                        param_str = f'{param} = '
+                        if param_str in line:
+                            params[param_idx] = float(line[len(param_str):])
+            err_str = f'{n_bp}bp: Not all parameters in varied_params found in {values_path}'
+            assert np.all([param is not None for param in params]), err_str
+            # Check the ells for consistency
+            galaxy_ell = np.loadtxt(os.path.join(source_dir, 'galaxy_cl/ell.txt'))[:n_ell_in]
+            shear_ell = np.loadtxt(os.path.join(source_dir, 'shear_cl/ell.txt'))[:n_ell_in]
+            galaxy_shear_ell = np.loadtxt(os.path.join(source_dir, 'galaxy_shear_cl/ell.txt'))[:n_ell_in]
+
+            assert np.array_equal(galaxy_ell, ell_in)
+            assert np.array_equal(shear_ell, ell_in)
+            assert np.array_equal(galaxy_shear_ell, ell_in)
+
+            # Load theory Cls
+            th_pos_pos_dir = os.path.join(source_dir, 'galaxy_cl/')
+            th_she_she_dir = os.path.join(source_dir, 'shear_cl/')
+            th_pos_she_dir = os.path.join(source_dir, 'galaxy_shear_cl/')
+
+            noise_pos_pos_dir = os.path.join(noise_path, 'galaxy_cl/')
+            noise_she_she_dir = os.path.join(noise_path, 'shear_cl/')
+            noise_pos_she_dir = os.path.join(noise_path, 'galaxy_shear_cl/')
+
+            theory_cl = like_bp_mix.load_cls(n_zbin, th_pos_pos_dir, th_she_she_dir, th_pos_she_dir, lmax=lmax_in)
+            noise_cls = like_bp_mix.load_cls(n_zbin, noise_pos_pos_dir, noise_she_she_dir, noise_pos_she_dir, lmax=lmax_in)
+            '''
+            noise_bps = []
+            for noise_cl in noise_cls:
+                #noise_cl = np.asarray(noise_cl)
+                #noise_bps.append(pbl@np.transpose(noise_cl))
+                noise_bps.append(pbl@noise_cl)
+            '''
+            # Evaluate likelihood
+            #log_like_gauss = like_bp_mix.execute(theory_cl, lmin_in, config)
+
+            log_like_gauss = like_bp_mix.execute(theory_cl, lmin_in, config, noise_cls=noise_cls, pbl_nn=pbl_nn, pbl_ne=pbl_ne, pbl_ee=pbl_ee)
+            print(log_like_gauss)
+            #log_like_gauss = like_bp_mix.execute(theory_cl, lmin_in, config, noise_cls=noise_bps)
+
+            exp_bps = like_bp_mix.exp_bp(theory_cl, lmin_in, config, noise_cls=noise_cls, pbl_nn=pbl_nn, pbl_ne=pbl_ne, pbl_ee=pbl_ee)
+            #exp_bps = like_bp_mix.exp_bp(theory_cl, lmin_in, config, noise_cls=noise_bps)
+
+            exp_bps_grid.append(exp_bps)
+            # Store cosmological params & likelihood
+            res.append([*params, log_like_gauss])
+        #print(exp_bps_grid)
+        # Save results to file
+        res_grid = np.asarray(res)
+        param_names = ' '.join(varied_params)
+        like_path = os.path.join(like_save_dir, f'like_{n_bp}bp.txt')
+        like_header = (f'Output from {__file__}.like_bp_gauss_mix_loop_nbin for parameters:\ngrid_dir = {grid_dir}\n'
+                       f'n_zbin = {n_zbin}\nlmax_like_nn = {lmax_like_nn}\nlmin_like_nn = {lmin_like_nn}\n'
+                       f'lmax_like_ne = {lmax_like_ne}\nlmin_like_ne = {lmin_like_ne}\n'
+                       f'lmax_like_ee = {lmax_like_ee}\nlmin_like_ee = {lmin_like_ee}lmax_in = {lmax_in}\n'
+                       f'lmin_in = {lmin_in}\nfid_pos_pos_dir = {fid_pos_pos_dir}\n'
+                       f'fid_she_she_dir = {fid_she_she_dir}\nfid_pos_she_dir = {fid_pos_she_dir}\n'
+                       f'noise_path = {noise_path}\nmixmats_path = {mixmats_path}\n'
+                       f'bp_cov_filemask = {bp_cov_filemask}\nn_bp = {n_bp}\nat {time.strftime("%c")}\n\n'
+                       f'{param_names} log_like_gauss')
+        np.savetxt(like_path, res_grid, header=like_header)
+        print(f'{n_bp}bp: Saved likelihood file to {like_path} at {time.strftime("%c")}')
+
+        print(f'{n_bp}bp: Done at {time.strftime("%c")}')
+        print()
+
+    print(f'All done at {time.strftime("%c")}')
+
+
 def like_bp_gauss_mix_loop_nbin_1x2pt(grid_dir, n_bps, n_zbin, lmax_like, lmin_like, lmax_in, lmin_in,
                                 field, noise_path, mixmats_path,
                                 bp_cov_filemask, binmixmat_save_dir, varied_params, like_save_dir,
-                                obs_bandpowers_dir, bandpower_spacing='log', bandpower_edges=None, cov_blocks_path=None,
+                                obs_bandpowers_dir, bandpower_spacing='log', bandpower_edges=None, cov_blocks_path=None
                                 ):
 
     """

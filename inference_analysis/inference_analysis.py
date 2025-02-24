@@ -31,8 +31,18 @@ nbins = int(config['inference_analysis_params']['N_ZBIN'])
 nside = int(config['inference_analysis_params']['NSIDE'])
 input_lmin = int(float(config['inference_analysis_params']['INPUT_ELL_MIN']))
 input_lmax = int(float(config['inference_analysis_params']['INPUT_ELL_MAX']))
-output_lmin = int(float(config['inference_analysis_params']['OUTPUT_ELL_MIN']))
-output_lmax = int(float(config['inference_analysis_params']['OUTPUT_ELL_MAX']))
+# output_lmin = int(float(config['inference_analysis_params']['OUTPUT_ELL_MIN']))
+# output_lmax = int(float(config['inference_analysis_params']['OUTPUT_ELL_MAX']))
+
+output_lmin_nn = int(float(config['inference_analysis_params']['OUTPUT_ELL_MIN_NN']))
+output_lmax_nn = int(float(config['inference_analysis_params']['OUTPUT_ELL_MAX_NN']))
+
+output_lmin_ne = int(float(config['inference_analysis_params']['OUTPUT_ELL_MIN_NE']))
+output_lmax_ne = int(float(config['inference_analysis_params']['OUTPUT_ELL_MAX_NE']))
+
+output_lmin_ee = int(float(config['inference_analysis_params']['OUTPUT_ELL_MIN_EE']))
+output_lmax_ee = int(float(config['inference_analysis_params']['OUTPUT_ELL_MAX_EE']))
+
 n_bandpowers = int(config['inference_analysis_params']['N_BANDPOWERS'])
 
 zmin = float(config['inference_analysis_params']['ZMIN'])
@@ -57,16 +67,17 @@ cov_fromsim_path = save_dir + 'cov_fromsim/'
 theory_cl_dir = save_dir + 'theory_cls/'
 noise_save_dir = save_dir + 'measured_noise_cls/'
 
-fname = '10Bin'
+fname = '7Bin'
 
 cl_like_filemask = save_dir + fname + '.txt'
 
+'''
 binmixmat_save_dir = inference_analysis_output_dir + 'bin_mix_mats/'
 if not os.path.exists(binmixmat_save_dir):
     os.makedirs(binmixmat_save_dir)
 
-'''
-cl_like_filemask = inference_analysis_output_dir + 'like_lmaxlike%s_{n_bp}bp.txt' % (output_lmax)
+
+cl_like_filemask = inference_analysis_output_dir + 'like_{n_bp}bp.txt'
 
 # Unpack CosmoSIS data from grid
 cosmosis_utils.combine_chain_output(input_dir=chains_input_dir,
@@ -85,16 +96,27 @@ cosmosis_utils.extract_data(input_dir=chains_input_dir,
 mask.get_3x2pt_mixmats(mask_path=mask_dir,
                        nside=nside,
                        lmin=input_lmin,
-                       lmax_mix=map_lmax,
-                       lmax_out=output_lmax,
                        input_lmax=input_lmax,
+                       lmax_out_nn=output_lmax_nn,
+                       lmax_out_ne=output_lmax_ne,
+                       lmax_out_ee=output_lmax_ee,
                        save_path=mix_mats_save_path)
+'''
 
 # Run the liklihood calculation for either a 1x2pt (shear only or clustering only) or 3x2pt analysis
 
 if obs_type == '1X2PT':
 
     field = str(config['inference_analysis_params']['FIELD'])
+
+    if field == 'E':
+        output_lmin = output_lmin_ee
+        output_lmax = output_lmax_ee
+
+    else:
+        assert field == 'N'
+        output_lmin = output_lmin_nn
+        output_lmax = output_lmax_nn
 
     loop_likelihood_nbin.like_bp_gauss_mix_loop_nbin_1x2pt(
         grid_dir=chains_input_dir,
@@ -116,16 +138,36 @@ if obs_type == '1X2PT':
         bandpower_edges=None,
         cov_blocks_path=cov_fromsim_path)
 
+    posterior.cl_post(
+        log_like_filemask=cl_like_filemask,
+        contour_levels_sig=[1, 2, 3],
+        bp=n_bandpowers,
+        colour='C0',
+        linestyle='-',
+        zrange=[zmin, zmax],
+        lrange=[[output_lmin_nn, output_lmax_nn], [output_lmin_ne, output_lmax_ne], [output_lmin_ee, output_lmax_ee]],
+        ngals=ngal,
+        nside=nside,
+        n_bandpowers=n_bandpowers,
+        obs_type=obs_type,
+        # plot_save_path=inference_analysis_output_dir+'contours_{}.png'.format(obs_type)
+        plot_save_path=save_dir + '_contours_l{}-{}_{}_{}.png'.format(output_lmin, output_lmax, obs_type, field)
+    )
+
 
 if obs_type == '3X2PT':
-
+    '''
     # Execute the likelihood analysis
     loop_likelihood_nbin.like_bp_gauss_mix_loop_nbin(
         grid_dir=chains_input_dir,
         n_bps=np.array([n_bandpowers]),
         n_zbin=nbins,
-        lmax_like=output_lmax,
-        lmin_like=output_lmin,
+        lmax_like_nn=output_lmax_nn,
+        lmin_like_nn=output_lmin_nn,
+        lmax_like_ne=output_lmax_ne,
+        lmin_like_ne=output_lmin_ne,
+        lmax_like_ee=output_lmax_ee,
+        lmin_like_ee=output_lmin_ee,
         lmax_in=input_lmax,
         lmin_in=input_lmin,
         fid_pos_pos_dir=theory_cl_dir+'galaxy_cl/',
@@ -143,22 +185,21 @@ if obs_type == '3X2PT':
         bandpower_edges=None,
         cov_blocks_path=cov_fromsim_path)
         #cov_blocks_path = save_combined_cov_path)
-'''
+    '''
+    # Generate the posterior distribution
 
-# Generate the posterior distribution
-
-posterior.cl_post(
-    log_like_filemask=cl_like_filemask,
-    contour_levels_sig=[1, 2, 3],
-    bp=n_bandpowers,
-    colour='C0',
-    linestyle='-',
-    zrange=[zmin, zmax],
-    lrange=[output_lmin, output_lmax],
-    ngals=ngal,
-    nside=nside,
-    n_bandpowers=n_bandpowers,
-    obs_type=obs_type,
-    #plot_save_path=inference_analysis_output_dir+'contours_l{}-{}_{}.png'.format(output_lmin, output_lmax, obs_type)
-    plot_save_path=save_dir + fname + '_contours_l{}-{}_{}.png'.format(output_lmin, output_lmax, obs_type)
-)
+    posterior.cl_post(
+        log_like_filemask=cl_like_filemask,
+        contour_levels_sig=[1, 2, 3],
+        bp=n_bandpowers,
+        colour='C0',
+        linestyle='-',
+        zrange=[zmin, zmax],
+        lrange=[[output_lmin_nn, output_lmax_nn], [output_lmin_ne, output_lmax_ne], [output_lmin_ee, output_lmax_ee]],
+        ngals=ngal,
+        nside=nside,
+        n_bandpowers=n_bandpowers,
+        obs_type=obs_type,
+        # plot_save_path=inference_analysis_output_dir+'contours_{}.png'.format(obs_type)
+        plot_save_path=save_dir + fname + '_contours_{}.png'.format(obs_type)
+    )

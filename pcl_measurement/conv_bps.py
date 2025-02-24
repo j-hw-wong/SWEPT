@@ -233,10 +233,10 @@ def main():
 
     # Determine observation type, i.e. 3x2pt or 1x2pt and if 1x2pt, which field ('E' or 'N')
 
-    obs_type = str(config['measurement_setup']['OBS_TYPE'])
+    obs_spec = str(config['measurement_setup']['OBS_TYPE'])
     obs_field = str(config['measurement_setup']['FIELD'])
 
-    if obs_type == '3X2PT':
+    if obs_spec == '3X2PT':
         conv_3x2pt_bps(
             n_zbin=n_zbin,
             n_bp=n_bp,
@@ -244,7 +244,7 @@ def main():
             recov_cat_bps_path=recov_cat_bps_path,
             obs_type='fid')
 
-    elif obs_type == '1X2PT':
+    elif obs_spec == '1X2PT':
         conv_1x2pt_bps(
             n_zbin=n_zbin,
             n_bp=n_bp,
