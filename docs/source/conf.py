@@ -6,6 +6,9 @@ sys.path.insert(0, os.path.abspath('..'))
 sys.path.insert(0, os.path.abspath('../angular_binning'))
 autodoc_mock_imports = ['gaussian_cl_likelihood', 'healpy', 'matplotlib', 'numpy', 'pymaster', 'scipy']
 
+sys.path.insert(1, os.environ['PIPELINE_DIR'])
+sys.path.insert(1, os.environ['GAUSSIAN_CL_LIKELIHOOD_PATH'])
+sys.path.insert(1, os.environ['ANGULAR_BINNING_PATH'])
 
 # -- Project information
 
