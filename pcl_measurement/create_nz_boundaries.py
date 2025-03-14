@@ -20,11 +20,12 @@ def nz_fromsim_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
+    pipeline_variables_path : (str)
+        Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
 
     Returns
     -------
-    Dictionary of n(z) parameters
+        Dictionary of n(z) parameters
     """
 
     config = configparser.ConfigParser()
@@ -75,12 +76,13 @@ def create_zbin_boundaries(config_dict):
     Parameters
     ----------
 
-    config_dict (dict): Dictionary of pipeline and redshift distribution parameters used to generate the bin boundaries
-                        and overall n(z)
+    config_dict : (dict)
+        Dictionary of pipeline and redshift distribution parameters used to generate the bin boundaries
+        and overall n(z)
 
     Returns
     -------
-    Array of the redshift bin boundaries evaluated for the given number of bins + binning configuration.
+        Array of the redshift bin boundaries evaluated for the given number of bins + binning configuration.
     """
 
     zmin = config_dict['zmin']

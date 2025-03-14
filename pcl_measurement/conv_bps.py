@@ -16,12 +16,15 @@ def mysplit(s):
 
     Parameters
     ----------
-    s (str):    String describing field and tomographic bin number
+    s : (str)
+        String describing field and tomographic bin number
 
     Returns
     -------
-    head (str): String describing field
-    tail (float):   Float describing tomographic bin id
+    head : (str)
+        String describing field
+    tail : (float)
+        Float describing tomographic bin id
     """
 
     head = s.rstrip('0123456789')
@@ -36,17 +39,22 @@ def conv_3x2pt_bps(n_zbin, n_bp, save_dir, recov_cat_bps_path, obs_type='obs'):
 
     Parameters
     ----------
-    n_zbin (float): Number of tomographic redshift bins
-    n_bp (float):   Number of bandpowers
-    save_dir (str): Path to directory that stores all measurement data (MEASUREMENT_SAVE_DIR from the
-                    set_variables_3x2pt_measurement.ini file)
-    recov_cat_bps_path (str): Location to store combined 3x2pt data vector as .npz file
-    obs_type (str): Use the data measured from simulation ('obs') or the fiducial data ('fid') to generate the
-                    combined data vector
+    n_zbin : (float)
+        Number of tomographic redshift bins
+    n_bp : (float)
+        Number of bandpowers
+    save_dir : (str)
+        Path to directory that stores all measurement data (MEASUREMENT_SAVE_DIR from the
+        set_variables_3x2pt_measurement.ini file)
+    recov_cat_bps_path : (str)
+        Location to store combined 3x2pt data vector as .npz file
+    obs_type : (str)
+        Use the data measured from simulation ('obs') or the fiducial data ('fid') to generate the
+        combined data vector
 
     Returns
     -------
-    Saves array in .npz format of the combined 3x2pt data vector.
+        Saves array in .npz format of the combined 3x2pt data vector.
     """
 
     n_field = 2 * n_zbin
@@ -138,18 +146,24 @@ def conv_1x2pt_bps(n_zbin, n_bp, save_dir, recov_cat_bps_path, obs_type='obs', f
 
     Parameters
     ----------
-    n_zbin (float): Number of tomographic redshift bins
-    n_bp (float):   Number of bandpowers
-    save_dir (str): Path to directory that stores all measurement data (MEASUREMENT_SAVE_DIR from the
-                    set_variables_3x2pt_measurement.ini file)
-    recov_cat_bps_path (str): Location to store combined 1x2pt data vector as .npz file
-    obs_type (str): Use the data measured from simulation ('obs') or the fiducial data ('fid') to generate the
-                    combined data vector
-    field (str):    'E' or 'N' to specify the 1x2pt measurement is cosmic shear only or angular clustering only
+    n_zbin : (float)
+        Number of tomographic redshift bins
+    n_bp : (float)
+        Number of bandpowers
+    save_dir : (str)
+        Path to directory that stores all measurement data (MEASUREMENT_SAVE_DIR from the
+        set_variables_3x2pt_measurement.ini file)
+    recov_cat_bps_path : (str)
+        Location to store combined 1x2pt data vector as .npz file
+    obs_type : (str)
+        Use the data measured from simulation ('obs') or the fiducial data ('fid') to generate the
+        combined data vector
+    field : (str)
+        'E' or 'N' to specify the 1x2pt measurement is cosmic shear only or angular clustering only
 
     Returns
     -------
-    Saves array in .npz format of the combined 3x2pt data vector.
+        Saves array in .npz format of the combined 3x2pt data vector.
     """
 
     n_field = n_zbin

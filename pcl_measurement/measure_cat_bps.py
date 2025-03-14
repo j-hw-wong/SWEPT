@@ -450,20 +450,29 @@ def process_02_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
 
     Parameters
     ----------
-    config_dict (dict): Config dictionary of pipeline/conversion variables
-    theory_cl_dir (str):    Path to location of fiducial full-sky power spectra
-    noise_cl_dir (str):     Path to location of predicted noise power spectra
-    spectra_type (str): Which spectra type (i.e. which component of the 3x2pt). For 02 must be 'TE' or 'TB' for shear,
-                        or 'gal_E' or 'gal_B' for cross correlation between shear and galaxy overdensity.
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    obs_mask_path (str):    Path to mask describing observed footprint
-    ell_arr (arr):  Array of the 'effective' ells that correspond to the bandpowers
-    pbl (arr):  Bandpower conversion matrix
+    config_dict : (dict)
+        Config dictionary of pipeline/conversion variables
+    theory_cl_dir : (str)
+        Path to location of fiducial full-sky power spectra
+    noise_cl_dir : (str)
+        Path to location of predicted noise power spectra
+    spectra_type : (str)
+        Which spectra type (i.e. which component of the 3x2pt). For 02 must be 'TE' or 'TB' for shear,
+        or 'gal_E' or 'gal_B' for cross correlation between shear and galaxy overdensity.
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    obs_mask_path : (str)
+        Path to mask describing observed footprint
+    ell_arr : (arr)
+        Array of the 'effective' ells that correspond to the bandpowers
+    pbl : (arr)
+        Bandpower conversion matrix
 
     Returns
     -------
-    Saves fiducial model of the 3x2pt 02 Pseudo bandpowers that include contribution from the expected noise.
+        Saves fiducial model of the 3x2pt 02 Pseudo bandpowers that include contribution from the expected noise.
     """
 
     output_lmin = config_dict['output_lmin']
@@ -576,20 +585,29 @@ def process_22_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
 
     Parameters
     ----------
-    config_dict (dict): Config dictionary of pipeline/conversion variables
-    theory_cl_dir (str):    Path to location of fiducial full-sky power spectra
-    noise_cl_dir (str):     Path to location of predicted noise power spectra
-    spectra_type (str): Which spectra type (i.e. which component of the 3x2pt). For 22 must be 'EE', 'EB', 'BE', or
-                        'BB' for shear.
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    obs_mask_path (str):    Path to mask describing observed footprint
-    ell_arr (arr):  Array of the 'effective' ells that correspond to the bandpowers
-    pbl (arr):  Bandpower conversion matrix
+    config_dict : (dict)
+        Config dictionary of pipeline/conversion variables
+    theory_cl_dir : (str)
+        Path to location of fiducial full-sky power spectra
+    noise_cl_dir : (str)
+        Path to location of predicted noise power spectra
+    spectra_type : (str)
+        Which spectra type (i.e. which component of the 3x2pt). For 22 must be 'EE', 'EB', 'BE', or
+        'BB' for shear.
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    obs_mask_path : (str)
+        Path to mask describing observed footprint
+    ell_arr : (arr)
+        Array of the 'effective' ells that correspond to the bandpowers
+    pbl : (arr)
+        Bandpower conversion matrix
 
     Returns
     -------
-    Saves fiducial model of the 3x2pt 22 Pseudo bandpowers that include contribution from the expected noise.
+        Saves fiducial model of the 3x2pt 22 Pseudo bandpowers that include contribution from the expected noise.
     """
 
     output_lmin = config_dict['output_lmin']
