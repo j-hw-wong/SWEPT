@@ -1,4 +1,0 @@
-Inf
-=====
-
-Test text here
