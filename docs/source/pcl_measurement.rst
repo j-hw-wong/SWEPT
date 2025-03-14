@@ -8,3 +8,5 @@ Pseudo-Cl measurement
    pcl_measurement/conv_bps
    pcl_measurement/cov_fromsim
    pcl_measurement/create_nz_boundaries
+   pcl_measurement/measure_cat_3x2pt_pcls
+   pcl_measurement/measure_cat_bps
