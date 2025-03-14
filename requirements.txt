@@ -3,5 +3,4 @@ healpy
 matplotlib
 numpy
 scipy
-pymaster
 # Namaster/pymaster - version may need to be checked

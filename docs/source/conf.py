@@ -2,6 +2,10 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../angular_binning'))
+autodoc_mock_imports = ['gaussian_cl_likelihood', 'healpy', 'matplotlib', 'numpy', 'pymaster', 'scipy']
+
 
 # -- Project information
 
