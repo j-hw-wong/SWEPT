@@ -3,8 +3,13 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../angular_binning'))
-autodoc_mock_imports = ['gaussian_cl_likelihood', 'angular_binning', 'healpy', 'matplotlib', 'numpy', 'pymaster', 'scipy', 'h5py']
+sys.path.insert(0, os.path.abspath('../../angular_binning'))
+sys.path.insert(0, os.path.abspath('../../gaussian_cl_likelihood'))
+sys.path.insert(0, os.path.abspath('../../catalogue_sim'))
+sys.path.insert(0, os.path.abspath('../../pcl_measurement'))
+sys.path.insert(0, os.path.abspath('../../inference_analysis'))
+
+autodoc_mock_imports = ['gaussian_cl_likelihood', 'angular_binning', 'healpy', 'matplotlib', 'numpy', 'pymaster', 'scipy', 'h5py', 'pyFlask']
 
 
 # -- Project information
