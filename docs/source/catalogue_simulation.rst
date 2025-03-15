@@ -2,7 +2,7 @@ Mock Catalogue Simulation
 ===================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
 
    catalogue_sim/clean_products
    catalogue_sim/compile_cat
