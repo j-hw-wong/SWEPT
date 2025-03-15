@@ -249,6 +249,7 @@ def setup_theory_cls(cl_dir, spectra_type, bin_i, bin_j):
 
     """
     Opens some theory Cls based on field type and bin combination to prepare for decoupling into a binned Pseudo-Cl
+
     Parameters
     ----------
     cl_dir : (str)
@@ -297,6 +298,7 @@ def pad_cls(lmin, input_cls):
     """
     Convenience function - in case lmin!=0, we need to pad the theory Cls with zeros at 0<=l<lmin in order to
     combine with the mixing + binning matrices used in NaMaster to generate a binned theoretical Pseudo-Cl
+
     Parameters
     ----------
     lmin : (float)
