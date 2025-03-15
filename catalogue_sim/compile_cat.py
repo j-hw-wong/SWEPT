@@ -24,11 +24,12 @@ def compile_cat_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to pipeline variables .ini file
+    pipeline_variables_path : (str)
+        Path to pipeline variables .ini file
 
     Returns
     -------
-    Dictionary of pipeline parameters
+        Dictionary of pipeline parameters
     """
 
     config = configparser.ConfigParser()
@@ -88,14 +89,18 @@ def generate_cat_err_sig(redshifts, lambda_1, lambda_2, sig):
 
     Parameters
     ----------
-    redshifts (arr):    Array of galaxy redshifts to inject catastrophic photo-zs into
-    lambda_1 (float):   Wavelength of first given spectral line
-    lambda_2 (float):   Wavelength of second given spectral line
-    sig (float):        Sigma spread describing the error distribution around where the pair confusion line is found
+    redshifts : (arr)
+        Array of galaxy redshifts to inject catastrophic photo-zs into
+    lambda_1 : (float)
+        Wavelength of first given spectral line
+    lambda_2 : (float)
+        Wavelength of second given spectral line
+    sig : (float)
+        Sigma spread describing the error distribution around where the pair confusion line is found
 
     Returns
     -------
-    Array of galaxy redshifts with catastrophic photo-z errors
+        Array of galaxy redshifts with catastrophic photo-z errors
     """
 
     cat_z_mus = ((1+redshifts)*(lambda_1/lambda_2))-1
@@ -110,12 +115,14 @@ def split_z_chunks(a, n):
 
     Parameters
     ----------
-    a (arr):    Array of redshift values
-    n (int):    Number of chunks to split data into
+    a : (arr)
+        Array of redshift values
+    n : (int)
+        Number of chunks to split data into
 
     Returns
     -------
-    Array of n sub-samples that the original data array a has been split into
+        Array of n sub-samples that the original data array a has been split into
     """
 
     k, m = divmod(len(a), n)

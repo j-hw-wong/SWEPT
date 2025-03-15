@@ -10,6 +10,6 @@ Pseudo-Cl measurement
    pcl_measurement/create_nz_boundaries
    pcl_measurement/measure_cat_3x2pt_pcls
    pcl_measurement/measure_cat_bps
-   pcl_measurement/run_3x2pt_tomo_measurement.md
-   pcl_measurement/set_variables_3x2pt_measurement.md
+   /docs/source/pcl_measurement/run_3x2pt_tomo_measurement.md
+   /docs/source/pcl_measurement/set_variables_3x2pt_measurement.md
 
