@@ -48,3 +48,19 @@ html_theme = 'sphinx_rtd_theme'
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
+
+from sphinx.application import Sphinx
+from sphinx.util.docfields import Field
+
+
+def setup(app: Sphinx):
+    app.add_object_type(
+        'confval',
+        'confval',
+        objname='configuration value',
+        indextemplate='pair: %s; configuration value',
+        doc_field_types=[
+            Field('type', label='Type', has_arg=False, names=('type',)),
+            Field('default', label='Default', has_arg=False, names=('default',)),
+        ]
+    )
