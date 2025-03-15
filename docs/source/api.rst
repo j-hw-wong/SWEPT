@@ -7,7 +7,7 @@ analysis. There are further helper files and scripts in other
 subdirectories that rely on additional external softwares.
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
    catalogue_simulation
    pcl_measurement
