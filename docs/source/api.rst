@@ -1,5 +1,5 @@
 File/Function Reference
-===
+=========================
 
 The SWEPT package has three components: the catalogue simulation
 module, the Pseudo-Cl measurement, and finally the Gaussian likelihood
