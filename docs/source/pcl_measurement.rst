@@ -2,7 +2,7 @@ Pseudo-Cl measurement
 ===================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 4
 
    pcl_measurement/av_cls
    pcl_measurement/conv_bps
