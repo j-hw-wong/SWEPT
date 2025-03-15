@@ -18,11 +18,12 @@ def flask_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of set_variables_cat.ini file
+    pipeline_variables_path : (str)
+        Path to location of set_variables_cat.ini file
 
     Returns
     -------
-    Dictionary of pipeline parameters to be input into Flask
+        Dictionary of pipeline parameters to be input into Flask
     """
 
     config = configparser.ConfigParser()

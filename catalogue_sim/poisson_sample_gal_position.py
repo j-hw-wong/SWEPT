@@ -20,15 +20,17 @@ def poisson_sample_masked_map(expected_numb_dens_map, mask, n_pixels):
 
     Parameters
     ----------
-    expected_numb_dens_map (arr):   Array of the 'expected' number density of galaxies converted from the raw density
-                                    field
-    mask (arr): Healpix map of the given mask used for observation
-    n_pixels (float):   Number of pixels in the given map
+    expected_numb_dens_map : (arr)
+        Array of the 'expected' number density of galaxies converted from the raw density field
+    mask : (arr)
+        Healpix map of the given mask used for observation
+    n_pixels : (float)
+        Number of pixels in the given map
 
     Returns
     -------
-    A Healpix map contaning the per pixel integer number density of galaxies. Pixels that fall outside of the mask are
-    given the hp.UNSEEN value.
+        A Healpix map contaning the per pixel integer number density of galaxies. Pixels that fall outside of the mask
+        are given the hp.UNSEEN value.
     """
 
     obs_inds = np.where(mask == 1)[0]

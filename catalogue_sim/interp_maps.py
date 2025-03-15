@@ -168,6 +168,10 @@ def save_interp_map(config, ras, decs, map_name, map_arr, z_at_slice, field_type
         Field type of given interpolated map - will dictate which folder on disk to save map into. Must
         be one of 'Clustering', 'Convergence', or 'Shear'. If type is 'Shear', assumes that the map_arr
         array is of the form [map_arr_1, map_arr_2], corresponding to the two shear components y1, y2
+
+    Returns
+    -------
+        Saves interpolated field maps
     """
 
     interp_cluster_path = config['interp_cluster_path']
@@ -286,7 +290,7 @@ def setup_interpolation(config, field, pair_type, pair_id=0):
 
     Returns
     -------
-
+        Loads given pairs of field maps at given id (redshift)
     """
 
     zs = config['zs']
@@ -338,12 +342,18 @@ def execute_interpolation(config, ras, decs, field):
 
     Parameters
     ----------
-    config (dict):  Dictionary of pipeline config parameters
-    ras (arr):      Array of RA values corresponding to each Healpix pixel (following Healpix indexing from 0 ->
-                    Npix)
-    decs (arr):     Array of Dec values corresponding to each Healpix pixel (following Healpix indexing from 0 ->
-                    Npix)
-    field (str):    Given field type - used to find and load Flask-generated maps
+    config : (dict)
+        Dictionary of pipeline config parameters
+    ras : (arr)
+        Array of RA values corresponding to each Healpix pixel (following Healpix indexing from 0 -> Npix)
+    decs : (arr)
+        Array of Dec values corresponding to each Healpix pixel (following Healpix indexing from 0 -> Npix)
+    field : (str)
+        Given field type - used to find and load Flask-generated maps
+
+    Returns
+    -------
+        Executes interpolation of field maps covering given redshift range
     """
 
     z_sample = config['z_sample']
