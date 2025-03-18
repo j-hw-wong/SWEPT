@@ -22,11 +22,12 @@ def interp_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of set_variables_cat.ini file
+    pipeline_variables_path : (str)
+        Path to location of set_variables_cat.ini file
 
     Returns
     -------
-    Dictionary of pipeline, 3x2pt and redshift parameters
+        Dictionary of pipeline, 3x2pt and redshift parameters
     """
 
     config = configparser.ConfigParser()
@@ -89,15 +90,19 @@ def load_map_slices(config, slice_i, slice_j, field_type):
 
     Parameters
     ----------
-    config (dict):  Dictionary of the pipeline parameters used for the catalogue simulation
-    slice_i (int):  Redshift-space ID of the first map to load in for pair-wise pixel interpolation
-    slice_j (int):  Redshift-space ID of the second map to load in for pair-wise pixel interpolation
-    field_type (str):   The given 3x2pt field to interpolate field values for. Must be one of 'Clustering',
-                        'Convergence', 'Shear_y1', or 'Shear_y2'
+    config : (dict)
+        Dictionary of the pipeline parameters used for the catalogue simulation
+    slice_i : (int)
+        Redshift-space ID of the first map to load in for pair-wise pixel interpolation
+    slice_j : (int)
+        Redshift-space ID of the second map to load in for pair-wise pixel interpolation
+    field_type : (str)
+        The given 3x2pt field to interpolate field values for. Must be one of 'Clustering',
+        'Convergence', 'Shear_y1', or 'Shear_y2'
 
     Returns
     -------
-    Array containing the map data for the two fields between which to interpolate pixel values
+        Array containing the map data for the two fields between which to interpolate pixel values
     """
 
     flask_output_dir = config['flask_output_dir']
@@ -147,15 +152,26 @@ def save_interp_map(config, ras, decs, map_name, map_arr, z_at_slice, field_type
 
     Parameters
     ----------
-    config (dict):  Config dictionary of pipeline parameters
-    ras (arr):      Array of RA values corresponding to each Healpix pixel (index ordered from 0 -> Npix)
-    decs (arr):     Array of Dec values corresponding to each Healpix pixel (index ordered from 0 -> Npix)
-    map_name (str): Name with which to save interpolated map to disk
-    map_arr (str):  The Healpix map array containing the interpolated field values
-    z_at_slice (float): Redshift at which the interpolated field map is evaluated
-    field_type (str):   Field type of given interpolated map - will dictate which folder on disk to save map into. Must
-                        be one of 'Clustering', 'Convergence', or 'Shear'. If type is 'Shear', assumes that the map_arr
-                        array is of the form [map_arr_1, map_arr_2], corresponding to the two shear components y1, y2
+    config : (dict)
+        Config dictionary of pipeline parameters
+    ras : (arr)
+        Array of RA values corresponding to each Healpix pixel (index ordered from 0 -> Npix)
+    decs : (arr)
+        Array of Dec values corresponding to each Healpix pixel (index ordered from 0 -> Npix)
+    map_name : (str)
+        Name with which to save interpolated map to disk
+    map_arr : (str)
+        The Healpix map array containing the interpolated field values
+    z_at_slice : (float)
+        Redshift at which the interpolated field map is evaluated
+    field_type : (str)
+        Field type of given interpolated map - will dictate which folder on disk to save map into. Must
+        be one of 'Clustering', 'Convergence', or 'Shear'. If type is 'Shear', assumes that the map_arr
+        array is of the form [map_arr_1, map_arr_2], corresponding to the two shear components y1, y2
+
+    Returns
+    -------
+        Saves interpolated field maps
     """
 
     interp_cluster_path = config['interp_cluster_path']
@@ -261,16 +277,20 @@ def setup_interpolation(config, field, pair_type, pair_id=0):
 
     Parameters
     ----------
-    config (dict):  Config dict on pipeline parameters
-    field (str):    Given field type - used to find directory to load Flask compiled maps and set up interpolation
-                    functions
-    pair_type (str):    'First', 'Middle', or 'Last' - pair type of Flask maps to set up either interpolation or
-                        extrapolation
-    pair_id (float):    The 'ID' corresponding to where the maps are in redshift-space
+    config : (dict)
+        Config dict on pipeline parameters
+    field : (str)
+        Given field type - used to find directory to load Flask compiled maps and set up interpolation
+        functions
+    pair_type : (str)
+        'First', 'Middle', or 'Last' - pair type of Flask maps to set up either interpolation or
+        extrapolation
+    pair_id : (float)
+        The 'ID' corresponding to where the maps are in redshift-space
 
     Returns
     -------
-
+        Loads given pairs of field maps at given id (redshift)
     """
 
     zs = config['zs']
@@ -322,12 +342,18 @@ def execute_interpolation(config, ras, decs, field):
 
     Parameters
     ----------
-    config (dict):  Dictionary of pipeline config parameters
-    ras (arr):      Array of RA values corresponding to each Healpix pixel (following Healpix indexing from 0 ->
-                    Npix)
-    decs (arr):     Array of Dec values corresponding to each Healpix pixel (following Healpix indexing from 0 ->
-                    Npix)
-    field (str):    Given field type - used to find and load Flask-generated maps
+    config : (dict)
+        Dictionary of pipeline config parameters
+    ras : (arr)
+        Array of RA values corresponding to each Healpix pixel (following Healpix indexing from 0 -> Npix)
+    decs : (arr)
+        Array of Dec values corresponding to each Healpix pixel (following Healpix indexing from 0 -> Npix)
+    field : (str)
+        Given field type - used to find and load Flask-generated maps
+
+    Returns
+    -------
+        Executes interpolation of field maps covering given redshift range
     """
 
     z_sample = config['z_sample']

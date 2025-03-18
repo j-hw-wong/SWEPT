@@ -2,6 +2,15 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../../angular_binning'))
+sys.path.insert(0, os.path.abspath('../../gaussian_cl_likelihood'))
+sys.path.insert(0, os.path.abspath('../../catalogue_sim'))
+sys.path.insert(0, os.path.abspath('../../pcl_measurement'))
+sys.path.insert(0, os.path.abspath('../../inference_analysis'))
+
+autodoc_mock_imports = ['gaussian_cl_likelihood', 'angular_binning', 'healpy', 'matplotlib', 'numpy', 'pymaster', 'scipy', 'h5py', 'pyFlask']
+
 
 # -- Project information
 
@@ -20,7 +29,10 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
+    'myst_parser'
 ]
+
+source_suffix = ['.rst', '.md']
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),
@@ -36,3 +48,19 @@ html_theme = 'sphinx_rtd_theme'
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
+
+from sphinx.application import Sphinx
+from sphinx.util.docfields import Field
+
+
+def setup(app: Sphinx):
+    app.add_object_type(
+        'confval',
+        'confval',
+        objname='configuration value',
+        indextemplate='pair: %s; configuration value',
+        doc_field_types=[
+            Field('type', label='Type', has_arg=False, names=('type',)),
+            Field('default', label='Default', has_arg=False, names=('default',)),
+        ]
+    )

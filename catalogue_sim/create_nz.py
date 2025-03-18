@@ -20,11 +20,12 @@ def nz_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of 'set_variables_cat.ini' file
+    pipeline_variables_path : (str)
+        Path to location of 'set_variables_cat.ini' file
 
     Returns
     -------
-    Dictionary of n(z) parameters
+        Dictionary of n(z) parameters
     """
 
     config = configparser.ConfigParser()
@@ -63,12 +64,13 @@ def create_zbin_boundaries(config_dict):
 
     Parameters
     ----------
-    config_dict (dict): Dictionary of pipeline and redshift distribution parameters used to generate the bin boundaries
-                        and overall n(z)
+    config_dict : (dict)
+        Dictionary of pipeline and redshift distribution parameters used to generate the bin boundaries
+        and overall n(z)
 
     Returns
     -------
-    Array of the redshift bin boundaries
+        Array of the redshift bin boundaries
     """
 
     zmin = config_dict['zmin']
@@ -102,9 +104,11 @@ def create_nz(config_dict, z_boundaries):
 
     Parameters
     ----------
-    config_dict (dict): Dictionary of pipeline/redshift distribution setup parameters used for the generation of the
-                        n(z)
-    z_boundaries (arr): Array of the redshift bin boundaries used to split the galaxy sample
+    config_dict : (dict)
+        Dictionary of pipeline/redshift distribution setup parameters used for the generation of the
+        n(z)
+    z_boundaries : (arr)
+        Array of the redshift bin boundaries used to split the galaxy sample
 
     """
 

@@ -17,12 +17,15 @@ def mysplit(s):
 
 	Parameters
 	----------
-	s (str):    String describing field and tomographic bin number
+	s : (str)
+		String describing field and tomographic bin number
 
 	Returns
 	-------
-	head (str): String describing field
-	tail (float):   Float describing tomographic bin id
+	head : (str)
+		String describing field
+	tail : (float)
+		Float describing tomographic bin id
 	"""
 
 	head = s.rstrip('0123456789')
@@ -37,14 +40,18 @@ def open_spectrum(id_a, id_b, measured_cls_dir, no_iter):
 
 	Parameters
 	----------
-	id_a (str):	String describing the first signal in the covariance calculation, e.g. 'N1'
-	id_b (str):	String describing the second signal in the covariance calculation, e.g. 'E1'
-	measured_cls_dir (str):	Path to directory where 3x2pt Cls measured from simulation are stored.
-	no_iter (float):	Number of realisations used in analysis.
+	id_a : (str)
+		String describing the first signal in the covariance calculation, e.g. 'N1'
+	id_b : (str)
+		String describing the second signal in the covariance calculation, e.g. 'E1'
+	measured_cls_dir : (str)
+		Path to directory where 3x2pt Cls measured from simulation are stored.
+	no_iter : (int)
+		Number of realisations used in analysis.
 
 	Returns
 	-------
-
+		Given Cl power spectrum data
 	"""
 
 	# id_a is the
@@ -104,8 +111,8 @@ def main():
 
 	Returns
 	-------
-	Numerical covariance matrix, saved as an array in .npz to specified location on disk - the 'cov_fromsim'
-	subdirectory within the main measurement directory.
+		Numerical covariance matrix, saved as an array in .npz to specified location on disk - the 'cov_fromsim'
+		subdirectory within the main measurement directory.
 	"""
 
 	# Extract and store useful pipeline variables for calculation of covariance matrix

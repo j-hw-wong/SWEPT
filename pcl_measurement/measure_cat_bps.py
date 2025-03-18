@@ -28,11 +28,12 @@ def measure_bps_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
+    pipeline_variables_path : (str)
+        Path to location of pipeline variables file ('set_variables_3x2pt_measurement.ini')
 
     Returns
     -------
-    Dictionary of parameters used by this script to measure 3x2pt Pseudo bandpowers
+        Dictionary of parameters used by this script to measure 3x2pt Pseudo bandpowers
     """
 
     config = configparser.ConfigParser()
@@ -128,17 +129,23 @@ def measured_cls_to_obs_cls(measured_cls_dir, obs_cls_dir, bin_i, bin_j, lmin_ou
 
     Parameters
     ----------
-    measured_cls_dir (str): Path to 3xp2t power spectra as measured and averaged over by measure_cat_3x2pt_pcls.py and
-                            av_cls.py
-    obs_cls_dir (str):  Path to location to store scale-cut (in ell) 3x2pt power spectra
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    lmin_out (float):   Minimum ell that the power spectra are saved to for conversion into bandpowers
-    lmax_out (float):   Maximum ell that the power spectra are saved to for conversion into bandpowers
+    measured_cls_dir : (str)
+        Path to 3xp2t power spectra as measured and averaged over by measure_cat_3x2pt_pcls.py and
+        av_cls.py
+    obs_cls_dir : (str)
+        Path to location to store scale-cut (in ell) 3x2pt power spectra
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    lmin_out : (float)
+        Minimum ell that the power spectra are saved to for conversion into bandpowers
+    lmax_out : (float)
+        Maximum ell that the power spectra are saved to for conversion into bandpowers
 
     Returns
     -------
-    Saves txt file of the power spectra that have been cut to specified ell range.
+        Saves txt file of the power spectra that have been cut to specified ell range.
     """
 
     measured_cl = np.loadtxt(measured_cls_dir + 'bin_{}_{}.txt'.format(bin_i, bin_j))
@@ -162,16 +169,21 @@ def cl_to_bp(cl_dir, bp_dir, bin_i, bin_j, pbl):
 
     Parameters
     ----------
-    cl_dir (str):   Path to 3x2pt power spectra
-    bp_dir (str):   Path to save measured 3x2pt bandpowers
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    pbl (arr):      Pbl matrix to convert Cls to bandpowers. Pbl matrix will be generated in the main function and will
-                    be specified to the chosen ell range.
+    cl_dir : (str)
+        Path to 3x2pt power spectra
+    bp_dir : (str)
+        Path to save measured 3x2pt bandpowers
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    pbl : (arr)
+        Pbl matrix to convert Cls to bandpowers. Pbl matrix will be generated in the main function and will
+        be specified to the chosen ell range.
 
     Returns
     -------
-    Saves txt file of the measured 3x2pt bandpowers
+        Saves txt file of the measured 3x2pt bandpowers
     """
 
     this_cl = np.loadtxt(cl_dir + 'bin_{}_{}.txt'.format(bin_i, bin_j))
@@ -190,15 +202,20 @@ def calc_stdem_bps(bp_dir, n_bps, bin_i, bin_j, realisations):
 
     Parameters
     ----------
-    bp_dir (str):   Path to txt files of the measured bandpowers for all realisations
-    n_bps (float):  Number of bandpowers used
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    realisations (float):   Number of realisations
+    bp_dir : (str)
+        Path to txt files of the measured bandpowers for all realisations
+    n_bps : (int)
+        Number of bandpowers used
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    realisations : (int)
+        Number of realisations
 
     Returns
     -------
-    Saves txt file of the standard error on mean for all tomographic 3x2pt bandpowers measured across all realisations.
+        Saves txt file of the standard error on mean for all tomographic 3x2pt bandpowers measured across all realisations.
     """
 
     bps_err = []
@@ -232,16 +249,21 @@ def setup_theory_cls(cl_dir, spectra_type, bin_i, bin_j):
 
     """
     Opens some theory Cls based on field type and bin combination to prepare for decoupling into a binned Pseudo-Cl
+
     Parameters
     ----------
-    cl_dir (str):   Path to the fiducial 3x2pt full-sky power spectra
-    spectra_type (str): Which spectra is being generated. For extracting the correct spectrum file.
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
+    cl_dir : (str)
+        Path to the fiducial 3x2pt full-sky power spectra
+    spectra_type : (str)
+        Which spectra is being generated. For extracting the correct spectrum file.
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
 
     Returns
     -------
-    Array of the fiducial power spectrum, and its path
+        Array of the fiducial power spectrum, and its path
     """
 
     accepted_spectra_types = {'TT', 'TE', 'TB', 'EE', 'EB', 'BE', 'BB', 'kk', 'gal_gal', 'gal_E', 'gal_B'}
@@ -276,14 +298,17 @@ def pad_cls(lmin, input_cls):
     """
     Convenience function - in case lmin!=0, we need to pad the theory Cls with zeros at 0<=l<lmin in order to
     combine with the mixing + binning matrices used in NaMaster to generate a binned theoretical Pseudo-Cl
+
     Parameters
     ----------
-    lmin (float):   Minimum ell of fiducial power spectra
-    input_cls (arr):    Array of fiducial power spectrum values
+    lmin : (float)
+        Minimum ell of fiducial power spectra
+    input_cls : (arr)
+        Array of fiducial power spectrum values
 
     Returns
     -------
-
+        Cls padded to given ell minimum
     """
 
     if lmin != 0:
@@ -303,14 +328,18 @@ def create_null_spectras(nbins, lmin, lmax, output_dir):
 
     Parameters
     ----------
-    nbins (float):  Number of tomographic bins
-    lmin (float):   Minimum ell of null power spectra. Should match the minimum ell used in measured_cls_to_obs_cls
-    lmax (float):   Maximum ell of null power spectra. Should match the minimum ell used in measured_cls_to_obs_cls
-    output_dir (str):   Path of location to save null power spectra
+    nbins : (float)
+        Number of tomographic bins
+    lmin : (float)
+        Minimum ell of null power spectra. Should match the minimum ell used in measured_cls_to_obs_cls
+    lmax : (float)
+        Maximum ell of null power spectra. Should match the minimum ell used in measured_cls_to_obs_cls
+    output_dir : (str)
+        Path of location to save null power spectra
 
     Returns
     -------
-    Saves txt file of null (zero) power spectra saved to an ell range that matches measured_cls_to_obs_cls
+        Saves txt file of null (zero) power spectra saved to an ell range that matches measured_cls_to_obs_cls
     """
 
     null_spectras_dir = output_dir + 'null_spectra/'
@@ -339,20 +368,29 @@ def process_00_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
 
     Parameters
     ----------
-    config_dict (dict): Config dictionary of pipeline/conversion variables
-    theory_cl_dir (str):    Path to location of fiducial full-sky power spectra
-    noise_cl_dir (str):     Path to location of predicted noise power spectra
-    spectra_type (str): Which spectra type (i.e. which component of the 3x2pt). For 00 must be 'TT' for shear, or
-                        'gal_gal' for galaxy overdensity.
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    obs_mask_path (str):    Path to mask describing observed footprint
-    ell_arr (arr):  Array of the 'effective' ells that correspond to the bandpowers
-    pbl (arr):  Bandpower conversion matrix
+    config_dict : (dict)
+        Config dictionary of pipeline/conversion variables
+    theory_cl_dir : (str)
+        Path to location of fiducial full-sky power spectra
+    noise_cl_dir : (str)
+        Path to location of predicted noise power spectra
+    spectra_type : (str)
+        Which spectra type (i.e. which component of the 3x2pt). For 00 must be 'TT' for shear, or
+        'gal_gal' for galaxy overdensity.
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    obs_mask_path : (str)
+        Path to mask describing observed footprint
+    ell_arr : (arr)
+        Array of the 'effective' ells that correspond to the bandpowers
+    pbl : (arr)
+        Bandpower conversion matrix
 
     Returns
     -------
-    Saves fiducial model of the 3x2pt 00 Pseudo bandpowers that include contribution from the expected noise
+        Saves fiducial model of the 3x2pt 00 Pseudo bandpowers that include contribution from the expected noise
     """
 
     output_lmin = config_dict['output_lmin']
@@ -414,20 +452,29 @@ def process_02_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
 
     Parameters
     ----------
-    config_dict (dict): Config dictionary of pipeline/conversion variables
-    theory_cl_dir (str):    Path to location of fiducial full-sky power spectra
-    noise_cl_dir (str):     Path to location of predicted noise power spectra
-    spectra_type (str): Which spectra type (i.e. which component of the 3x2pt). For 02 must be 'TE' or 'TB' for shear,
-                        or 'gal_E' or 'gal_B' for cross correlation between shear and galaxy overdensity.
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    obs_mask_path (str):    Path to mask describing observed footprint
-    ell_arr (arr):  Array of the 'effective' ells that correspond to the bandpowers
-    pbl (arr):  Bandpower conversion matrix
+    config_dict : (dict)
+        Config dictionary of pipeline/conversion variables
+    theory_cl_dir : (str)
+        Path to location of fiducial full-sky power spectra
+    noise_cl_dir : (str)
+        Path to location of predicted noise power spectra
+    spectra_type : (str)
+        Which spectra type (i.e. which component of the 3x2pt). For 02 must be 'TE' or 'TB' for shear,
+        or 'gal_E' or 'gal_B' for cross correlation between shear and galaxy overdensity.
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    obs_mask_path : (str)
+        Path to mask describing observed footprint
+    ell_arr : (arr)
+        Array of the 'effective' ells that correspond to the bandpowers
+    pbl : (arr)
+        Bandpower conversion matrix
 
     Returns
     -------
-    Saves fiducial model of the 3x2pt 02 Pseudo bandpowers that include contribution from the expected noise.
+        Saves fiducial model of the 3x2pt 02 Pseudo bandpowers that include contribution from the expected noise.
     """
 
     output_lmin = config_dict['output_lmin']
@@ -540,20 +587,29 @@ def process_22_pcls(config_dict, theory_cl_dir, noise_cl_dir, spectra_type, bin_
 
     Parameters
     ----------
-    config_dict (dict): Config dictionary of pipeline/conversion variables
-    theory_cl_dir (str):    Path to location of fiducial full-sky power spectra
-    noise_cl_dir (str):     Path to location of predicted noise power spectra
-    spectra_type (str): Which spectra type (i.e. which component of the 3x2pt). For 22 must be 'EE', 'EB', 'BE', or
-                        'BB' for shear.
-    bin_i (float):  Tomographic bin id number of the first field
-    bin_j (float):  Tomographic bin id number of the second field
-    obs_mask_path (str):    Path to mask describing observed footprint
-    ell_arr (arr):  Array of the 'effective' ells that correspond to the bandpowers
-    pbl (arr):  Bandpower conversion matrix
+    config_dict : (dict)
+        Config dictionary of pipeline/conversion variables
+    theory_cl_dir : (str)
+        Path to location of fiducial full-sky power spectra
+    noise_cl_dir : (str)
+        Path to location of predicted noise power spectra
+    spectra_type : (str)
+        Which spectra type (i.e. which component of the 3x2pt). For 22 must be 'EE', 'EB', 'BE', or
+        'BB' for shear.
+    bin_i : (float)
+        Tomographic bin id number of the first field
+    bin_j : (float)
+        Tomographic bin id number of the second field
+    obs_mask_path : (str)
+        Path to mask describing observed footprint
+    ell_arr : (arr)
+        Array of the 'effective' ells that correspond to the bandpowers
+    pbl : (arr)
+        Bandpower conversion matrix
 
     Returns
     -------
-    Saves fiducial model of the 3x2pt 22 Pseudo bandpowers that include contribution from the expected noise.
+        Saves fiducial model of the 3x2pt 22 Pseudo bandpowers that include contribution from the expected noise.
     """
 
     output_lmin = config_dict['output_lmin']

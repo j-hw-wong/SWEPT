@@ -17,12 +17,13 @@ def pz_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to the 'set_variables_cat.ini' parameters file that exists within pipeline
-                                    folder
+    pipeline_variables_path : (str)
+        Path to the 'set_variables_cat.ini' parameters file that exists within pipeline
+        folder
 
     Returns
     -------
-    Dictionary of config parameters for initialisation of random galaxies
+        Dictionary of config parameters for initialisation of random galaxies
     """
 
     config = configparser.ConfigParser()
@@ -65,13 +66,16 @@ def pz(z, z0, beta):
 
     Parameters
     ----------
-    z (array):      Redshift values with which to return a probability distribution
-    z0 (float):     Functional constant to normalise the redshift
-    beta (float):   Exponential constant for redshift distribution
+    z : (array)
+        Redshift values with which to return a probability distribution
+    z0 : (float)
+        Functional constant to normalise the redshift
+    beta : (float)
+        Exponential constant for redshift distribution
 
     Returns
     -------
-    Array of the probability values at the given redshifts
+        Array of the probability values at the given redshifts
     """
 
     return ((z/z0)**2)*np.exp(-1*((z/z0)**beta))
@@ -84,8 +88,13 @@ def init_nz(config_dict):
 
     Parameters
     ----------
-    config_dict (dict): Dictionary of config parameters set up in pz_config
+    config_dict : (dict)
+        Dictionary of config parameters set up in pz_config
 
+
+    Returns
+    -------
+        Saves sample of galaxies in hdf5 format
     """
 
     zmin = config_dict['zmin']

@@ -16,11 +16,12 @@ def conversion_config(pipeline_variables_path):
 
     Parameters
     ----------
-    pipeline_variables_path (str):  Path to location of set_variables_cat.ini file
+    pipeline_variables_path : (str)
+        Path to location of set_variables_cat.ini file
 
     Returns
     -------
-    Dictionary of pipeline and file conversion parameters
+        Dictionary of pipeline and file conversion parameters
     """
 
     config = configparser.ConfigParser()
@@ -58,11 +59,12 @@ def open_data(data_file):
 
     Parameters
     ----------
-    data_file (str):    Path to data file
+    data_file : (str)
+        Path to data file
 
     Returns
     -------
-    Array of data stored on disk
+        Array of data stored on disk
     """
 
     data_arr = []
@@ -85,12 +87,14 @@ def normalise_power(raw_cls, raw_ells):
 
     Parameters
     ----------
-    raw_cls (arr):  Array of raw Cls
-    raw_ells (arr): Array of raw ells
+    raw_cls : (arr)
+        Array of raw Cls
+    raw_ells : (arr)
+        Array of raw ells
 
     Returns
     -------
-    Array of Normalised Cls
+        Array of Normalised Cls
     """
 
     cl_normalised = []
@@ -108,7 +112,8 @@ def execute(config_dict):
 
     Parameters
     ----------
-    config_dict (dict): Dictionary of pipeline and field parameters for the 3x2pt simulation
+    config_dict : (dict)
+        Dictionary of pipeline and field parameters for the 3x2pt simulation
     """
 
     save_dir = config_dict['save_dir']
