@@ -9,8 +9,6 @@ performs an end-to-end cosmological weak lensing (cosmic shear) power spectrum a
 - (Gaussian) likelihooad analysis to measure constraints of :math:`3\times2`\pt Pseudo-:math:`C_{\ell}` data vector on
   dark energy :math:`(w_{0},w_{a})` parameters
 
-    Here is some test text
-
 ..
     **Lumache** (/lu'make/) is a Python library for cooks and food lovers
     that creates recipes mixing random ingredients.
