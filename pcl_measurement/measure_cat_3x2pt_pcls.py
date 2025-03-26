@@ -52,6 +52,7 @@ def measure_pcls_config(pipeline_variables_path):
 
     nside = int(config['measurement_setup']['NSIDE'])
     nbins = int(config['create_nz']['N_ZBIN'])
+    bin_type = str(config['create_nz']['ZBIN_TYPE'])
     npix = hp.nside2npix(nside)
 
     # These lmin, lmax out could be changed - lrange that is measured out from Healpix maps
@@ -67,6 +68,7 @@ def measure_pcls_config(pipeline_variables_path):
     config_dict = {
         'nside': nside,
         'nbins': nbins,
+        'bin_type': bin_type,
         'npix': npix,
         'zmin': zmin,
         'zmax': zmax,
@@ -105,6 +107,7 @@ def maps_from_cats(config_dict, iter_no):
 
     nside = config_dict['nside']
     nbins = config_dict['nbins']
+    bin_type = config_dict['bin_type']
     npix = config_dict['npix']
     zmin = config_dict['zmin']
     zmax = config_dict['zmax']
@@ -144,8 +147,27 @@ def maps_from_cats(config_dict, iter_no):
     indices = indices.astype(int)
 
     zs = np.around(zs, decimals=1)
-
     z_boundaries_filename = 'z_boundaries.txt'
+
+    if bin_type == 'EQUI_POP':
+        zs_cut = zs[zs<=(zmax-dz)]
+        sorted_sample = np.sort(zs_cut)
+        split_sorted_sample = np.array_split(sorted_sample, nbins)
+        z_boundaries_low = [zmin]
+        z_boundaries_high = []
+        for i in range(nbins):
+            z_boundaries_low.append(split_sorted_sample[i][-1])
+            z_boundaries_high.append(split_sorted_sample[i][-1])
+        z_boundaries_high.append(z_boundaries_high[-1] + dz)
+        z_boundaries_mid = []
+        for i in range(len(z_boundaries_low)):
+            z_boundaries_mid.append(round(np.mean([z_boundaries_low[i], z_boundaries_high[i]]), 2))
+
+        z_boundaries = [z_boundaries_low, z_boundaries_mid, z_boundaries_high]
+        np.savetxt(save_dir + z_boundaries_filename,
+                   np.transpose(z_boundaries),
+                   fmt=['%.2f', '%.2f', '%.2f'])
+
     z_boundaries = np.loadtxt(save_dir + z_boundaries_filename)
     z_boundary_columns = np.transpose(z_boundaries)
     # could import and run function (try?)
