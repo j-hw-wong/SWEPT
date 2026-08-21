@@ -15,4 +15,4 @@ to derive constraints on the w0-wa parameters for a time-evolving Dark Energy eq
 By running ```run_inference.sh```, the code will perform the Gaussian likelihood analysis, and save the posterior constraints on w0-wa for the given dataset/tomographic
 configuration in txt format on disk (location specified in the ```set_variables_inference.ini``` config file.
 
-[The implementation of the Hartlap Correction will need to be input manually within ```angular_binning```
+[The implementation of the Hartlap Correction will need to be input manually within ```angular_binning```]
