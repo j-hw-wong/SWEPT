@@ -59,7 +59,7 @@ def main():
     pipeline directory and overwritten with the parameters from the dictionary set up in flask_config
     """
 
-    rnd_seed = random.randint(100,999)
+    rnd_seed = random.randint(100,999)    # TUNE FOR SCIENCE GOAL
 
     pipeline_variables_path = os.environ['PIPELINE_VARIABLES_PATH']
     config_dict = flask_config(pipeline_variables_path=pipeline_variables_path)
