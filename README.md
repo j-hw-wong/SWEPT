@@ -40,4 +40,4 @@ For any questions, please contact jonathan.wong@manchester.ac.uk or jonathanhw.w
 
 Full documentation available at [Read the Docs](https://swept.readthedocs.io/en/latest/#) 
 
-**(NOTE: Documentation incomplete and codebase/repo not regularly overseen at present)**
+**(NOTE: Documentation incomplete and codebase/repository not regularly overseen at present)**
